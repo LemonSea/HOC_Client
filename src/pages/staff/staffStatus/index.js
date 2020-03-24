@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators';
 
@@ -11,120 +11,118 @@ import EditForm from './edit-form';
 /*
   职员类型管理
 */
-function StaffStatus(props) {
+class StaffStatus extends Component {
 
-  // dispatch to props
-  const { getStaffStatusList } = props;
-  // dispathc to props by Modal
-  const { showAdd, handleCancel, showEdit, addStaffStatus, editStaffStatus } = props;
+  state = {
 
-  // state to props
-  const { staffStatusList, loading, showStatus, creator } = props;
-  const staffStatusListJS = staffStatusList ? staffStatusList.toJS() : [];
-  const creatorJS = creator ? creator.toJS() : {};
+  }
 
-  const [item, setItem] = useState({});
-  const [admin, setAdmin] = useState({});
-  const [form, setForm] = useState({});
-  const [formData, setFormData] = useState({});
+  initColumns = () => {
+    this.columns = [
+      {
+        title: '类型',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '描述',
+        dataIndex: 'describe',
+        key: 'describe',
+      },
+      {
+        title: '创建者',
+        dataIndex: 'creator',
+        key: 'creator',
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createTime',
+        key: 'createTime',
+      },
+      {
+        title: '操作',
+        width: 300,
+        render: (item) => (  // 返回需要线上的界面标签
+          <span>
+            <LinkButton onClick={() => {
+            }
+            }>修改分类</LinkButton>
+            <LinkButton>删除分类</LinkButton>
+          </span>
+        ),
+      }
+    ];
+  }
 
-  useEffect(() => {
-    // console.log('getMenuList')
-    getStaffStatusList()
-  }, [])
+  componentWillMount() {
+    // list 标题
+    this.initColumns()
+  }
 
-  // list 内容
-  const dataSource = staffStatusListJS;
-  // list 标题
-  const columns = [
-    {
-      title: '类型',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '描述',
-      dataIndex: 'describe',
-      key: 'describe',
-    },
-    {
-      title: '创建者',
-      dataIndex: 'creator',
-      key: 'creator',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
-    },
-    {
-      title: '操作',
-      width: 300,
-      render: (item) => (  // 返回需要线上的界面标签
-        <span>
-          <LinkButton onClick={() => {
-            showEdit();
-            setItem(item);
-            setAdmin(creatorJS)
-          }
-          }>修改分类</LinkButton>
-          <LinkButton>删除分类</LinkButton>
-        </span>
-      ),
-    }
-  ];
+  componentDidMount() {
+    this.props.getStaffStatusList()
+  }
+
+  render() {
+    // dispatch to props
+    const { getStaffStatusList } = this.props;
+    // dispathc to props by Modal
+    const { showAdd, handleCancel, showEdit, addStaffStatus, editStaffStatus } = this.props;
+
+    // state to props
+    const { staffStatusList, loading, showStatus, creator } = this.props;
+    const staffStatusListJS = staffStatusList ? staffStatusList.toJS() : [];
+    const creatorJS = creator ? creator.toJS() : {};
+
+    // list 内容
+    const dataSource = staffStatusListJS;
 
 
-  // card 的左侧标题
-  const title = '员工类型';
-  // card 的右侧
-  const extra = (
-    <Button type='primary' onClick={() => {
-      showAdd();
-      setAdmin(creatorJS)
-    }} >
-      <Icon type='plus'></Icon>
+
+    // card 的左侧标题
+    const title = '员工类型';
+    // card 的右侧
+    const extra = (
+      <Button type='primary' onClick={() => {
+      }} >
+        <Icon type='plus'></Icon>
         添加
-    </Button>
-  )
+      </Button>
+    )
 
-  return (
-    <Card title={title} extra={extra}>
-      <Table
-        bordered={true}
-        rowKey='_id'
-        loading={loading}
-        dataSource={dataSource}
-        columns={columns}
-        pagination={{ defaultPageSize: 5, showQuickJumper: true }}
-      />;
+    return (
+      <Card title={title} extra={extra}>
+        <Table
+          bordered={true}
+          rowKey='_id'
+          loading={loading}
+          dataSource={dataSource}
+          columns={this.columns}
+          pagination={{ defaultPageSize: 5, showQuickJumper: true }}
+        />;
 
-      <Modal
-        title="添加分类"
-        visible={showStatus === 1}
-        onOk={() => { addStaffStatus(admin) }}
-        onCancel={() => { handleCancel(form) }}
-      >
-        <AddForm
-          admin={admin}
-        />
-      </Modal>
+        <Modal
+          title="添加分类"
+          visible={showStatus === 1}
+          onOk={showAdd}
+          onCancel={handleCancel}
+        >
+          <AddForm
+          />
+        </Modal>
 
-      <Modal
-        title="修改分类"
-        visible={showStatus === 2}
-        onOk={() => { editStaffStatus(admin, form, formData) }}
-        onCancel={() => { handleCancel(form) }}
-      >
-        <EditForm
-          item={item}
-          admin={admin}
-          setForm={(form) => { setForm(form) }}
-          setFormData={(formData) => { setFormData(formData) }}
-        />
-      </Modal>
-    </Card>
-  )
+        <Modal
+          title="修改分类"
+          visible={showStatus === 2}
+          onOk={showEdit}
+          onCancel={handleCancel}
+        >
+          <EditForm
+          />
+        </Modal>
+      </Card>
+    )
+  }
 }
 
 const mapStateToProps = (state) => ({
@@ -159,12 +157,9 @@ const mapDispatchToProps = (dispatch) => ({
     console.log('addStaffStatus');
     dispatch(actionCreators.addStaffStatus());
   },
-  editStaffStatus(admin, form, formData) {
-    form.resetFields();
-    formData['creator'] = admin._id;
-    console.log(form);
-    console.log(formData)
-    // dispatch(actionCreators.editStaffStatus(formData));
+  editStaffStatus() {
+    console.log('editStaffStatus');
+    dispatch(actionCreators.addStaffStatus());
   },
 })
 
