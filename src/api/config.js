@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// token 验证
+// 包含 token 验证的请求
 const axiosAuthInstance = axios.create({
   baseURL: baseUrl,
   timeout: 5000,  // 请求超时时间
