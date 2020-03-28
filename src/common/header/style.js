@@ -82,39 +82,45 @@ export const SearchBox = styled.div`
 export const SearchForm = styled.div`
   box-shadow: 0 0 6px 0 rgba(0,0,0,.13);
   height: 50px;
-  &.focused {
+  /* &.focused {
     border: 1px solid #53cac3;
     border-color: #53cac3!important;
-    transition: all linear .1s;
+  } */
+  &.show-enter {
+    border: 1px solid #fff;
+    transition: all .2s ease-out;
   }
-  .slide-enter {
-  opacity: 0;
-}
-.slide-enter-active {
-  opacity: 1;
-  transition: opacity 200ms;
-  border: 1px solid #53cac3;
-}
-.slide-exit {
-  opacity: 1;
-}
-.slide-exit-active {
-  opacity: 0;
-  transition: opacity 200ms;
-}
+  &.show-enter-active {
+    border: 1px solid #53cac3;
+  }
+  &.show-enter-done {
+    border: 1px solid #53cac3;
+  }
+  &.show-exit {
+    border: 1px solid #53cac3;
+  }
+  &.show-exit-active {
+    transition: all .2s ease-out;
+    border: 1px solid #fff;
+  }
+  &.show-exit-done {
+    transition: all .1s ease-out;
+    border: 1px solid #fff;
+  }
 `
 export const PositionSel = styled.div`
-  display: inline-block;  
-  box-sizing: border-box;
-  width: 130px;
+border: none;
+    display: inline-block;  
+    box-sizing: border-box;
+    width: 130px;
     height: 50px;
     float: left;
     padding-top: 9px;
     padding-bottom: 11px;
     border-color: #fff;
     border-left: 1px solid #fff;
-  font-size: 16px;
-  display: block;
+    font-size: 16px;
+    display: block;
     border-right: none;
     line-height: 30px;
     padding: 10px 15px 8px 15px;
@@ -125,24 +131,27 @@ export const PositionSel = styled.div`
     .iconfont {
       position: absolute;
       width: 16px;
-    height: 16px;
-    right: 8px;
-    font-size: 1px;
+      height: 16px;
+      right: 8px;
+      font-size: 1px;
     }
 `
 export const NavSearch = styled.input.attrs({
   placeholder: '搜索'
 })`
-float: left;
-border: 0;
   box-sizing: border-box;
+  float: left;
+  border: none;
+  outline: none;
   width: 664px;
   height: 50px;
-    line-height: 30px;
+  line-height: 30px;
   padding: 10px 19px;
   background-color:#FFFFFF;
 `
 export const BtnSearch = styled.div`
+  box-sizing: border-box;
+  border: none;
   float: left;
   box-sizing: border-box;
   width: 140px;
