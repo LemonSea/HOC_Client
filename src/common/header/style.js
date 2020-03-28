@@ -109,32 +109,31 @@ export const SearchForm = styled.div`
   }
 `
 export const PositionSel = styled.div`
-border: none;
-    display: inline-block;  
-    box-sizing: border-box;
-    width: 130px;
-    height: 50px;
-    float: left;
-    padding-top: 9px;
-    padding-bottom: 11px;
-    border-color: #fff;
-    border-left: 1px solid #fff;
-    font-size: 16px;
-    display: block;
-    border-right: none;
-    line-height: 30px;
-    padding: 10px 15px 8px 15px;
-    background-color: #fff;
-    position: relative;
-    cursor: pointer;
-
-    .iconfont {
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      right: 8px;
-      font-size: 1px;
-    }
+  border: none;
+  display: inline-block;  
+  box-sizing: border-box;
+  width: 130px;
+  height: 50px;
+  float: left;
+  padding-top: 9px;
+  padding-bottom: 11px;
+  border-color: #fff;
+  border-left: 1px solid #fff;
+  font-size: 16px;
+  display: block;
+  border-right: none;
+  line-height: 30px;
+  padding: 10px 15px 8px 15px;
+  background-color: #fff;
+  position: relative;
+  cursor: pointer;
+  .iconfont {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: 8px;
+    font-size: 1px;
+  }
 `
 export const NavSearch = styled.input.attrs({
   placeholder: '搜索'
