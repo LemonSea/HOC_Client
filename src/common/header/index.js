@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
-import  { actionCreators } from './store';
+import { Link } from 'react-router-dom';
+import { actionCreators } from './store';
 import {
   HeaderWrapper,
   Logo,
@@ -19,28 +20,28 @@ import {
 
 const Header = (props) => {
   return (
-    <div>
+    <div style={{zIndex:9999}}>
       <HeaderWrapper>
-        <Logo href='/' />
+      <Link to="/"><Logo/></Link>
         <Nav>
-          <NavItem className='left'></NavItem>
-          <NavItem className='left'>首页</NavItem>
-          <NavItem className='left'>服务人员</NavItem>
-          <NavItem className='left'>服务公司</NavItem>
-          <NavItem className='right'>我要开公司</NavItem>
+          <Link to="/"><NavItem className='left'></NavItem></Link>
+          <Link to="/"><NavItem className='left'>首页</NavItem></Link>
+          <Link to="/staff"><NavItem className='left'>服务人员</NavItem></Link>
+          <Link to="/brand"><NavItem className='left'>服务公司</NavItem></Link>
+          <Link to="/brand"><NavItem className='right'>我要开公司</NavItem></Link>
         </Nav>
-        <Addition>
-          <Button className='login'>登录</Button>
-          <Button>注册</Button>
-        </Addition>
+      <Addition>
+      <Link to="/login"><Button className='login'>登录</Button></Link>
+      <Link to="/register"><Button>注册</Button></Link>
+      </Addition>
       </HeaderWrapper>
-      <SearchWrapper >
-        <SearchBox>
-          <CSSTransition
-            in={props.focused}
-            timeout={200}
-            classNames="show"
-          >
+    <SearchWrapper >
+      <SearchBox>
+        <CSSTransition
+          in={props.focused}
+          timeout={200}
+          classNames="show"
+        >
           <SearchForm
             className={props.focused ? 'focused' : ''}
             onMouseEnter={props.handleInputFocus}
@@ -54,16 +55,16 @@ const Header = (props) => {
             ></NavSearch>
             <BtnSearch>搜索</BtnSearch>
           </SearchForm>
-          </CSSTransition>
-        </SearchBox>
-      </SearchWrapper>
-    </div>
+        </CSSTransition>
+      </SearchBox>
+    </SearchWrapper>
+    </div >
   );
 }
 
 const mapStateToProps = (state) => {
   return {
-    focused: state.getIn(['header','focused'])
+    focused: state.getIn(['header', 'focused'])
   }
 }
 const mapDispatchToProps = (dispatch) => {

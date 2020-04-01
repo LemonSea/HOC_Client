@@ -7,13 +7,13 @@ export const HeaderWrapper = styled.div`
   border-bottom: 1px solid #f0f0f0;
   background-color: #202329;
 `
-export const Logo = styled.a`
+export const Logo = styled.div`
   position: absolute;
   top: 0;
   left:  0;
   display: block;
   width: 300px;
-  height: 56px;
+  height: 55px;
   background: url(${logoPic});
   background-size: contain;
   margin-left: 50px;
@@ -70,6 +70,8 @@ export const Button = styled.div`
 export const SearchWrapper = styled.div`
     width: 100%;
     height: 100px;
+  background-color: #FFFFFF;
+  z-index:9999;
 `
 export const SearchBox = styled.div`
   box-sizing: border-box;
