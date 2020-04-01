@@ -21,6 +21,7 @@ import {
   message
 } from 'antd';
 import LinkButton from '../../components/link-button';
+import PicturesWall from './pictures-wall';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -33,6 +34,7 @@ class RegFirm extends Component {
       confirmDirty: false,
       autoCompleteResult: [],
     };
+    this.pw = React.createRef();
   }
 
   previous = () => {
@@ -43,6 +45,8 @@ class RegFirm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        const imgs = this.pw.current.getImgs()
+        console.log('imgs: ', imgs);
         console.log('Received values of form: ', values);
 
         this.props.history.push('/reg-account')
@@ -133,7 +137,7 @@ class RegFirm extends Component {
           // hoverable={true}
           headStyle={{ fontSize: 20 }}
         >
-          <Steps>            
+          <Steps>
             <Step status="finish" title="负责人信息" icon={<Icon type="user" />} />
             {/* <Step status="process" title="Login" icon={<Icon type="loading" />} /> */}
             <Step status="process" title="公司信息" icon={<Icon type="loading" />} />
@@ -141,6 +145,32 @@ class RegFirm extends Component {
             <Step status="wait" title="完成" icon={<Icon type="smile-o" />} />
           </Steps>
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+
+            <Form.Item label="name">
+              {getFieldDecorator('name', {
+                rules: [{ required: true, message: 'Please input your realName!' }],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item label="describe">
+              {getFieldDecorator('describe', {
+                rules: [{ required: true, message: 'Please input your describe!' }],
+              })(<Input.TextArea />)}
+            </Form.Item>
+
+            <Form.Item label="address">
+              {getFieldDecorator('address', {
+                rules: [{ required: true, message: 'Please input your address!' }],
+              })(<Input.TextArea />)}
+            </Form.Item>
+
+            {/* PicturesWall */}
+            <Form.Item label='公司照片'>
+              {/* {console.log('picture', item.imgs)} */}
+              <PicturesWall ref={this.pw}></PicturesWall>
+              {/* {console.log('picture', item.imgs)}
+              <PicturesWall ref={this.pw} imgs={item.imgs}></PicturesWall> */}
+            </Form.Item>
 
             <Form.Item label="E-mail">
               {getFieldDecorator('email', {
@@ -157,65 +187,11 @@ class RegFirm extends Component {
               })(<Input />)}
             </Form.Item>
 
-            {/* <Form.Item label="Password" hasFeedback>
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your password!',
-                  },
-                  {
-                    validator: this.validateToNextPassword,
-                  },
-                ],
-              })(<Input.Password />)}
-
-            </Form.Item>
-
-            <Form.Item label="Confirm Password" hasFeedback>
-              {getFieldDecorator('confirm', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please confirm your password!',
-                  },
-                  {
-                    validator: this.compareToFirstPassword,
-                  },
-                ],
-              })(<Input.Password onBlur={this.handleConfirmBlur} />)}
-            </Form.Item>
-
-            <Form.Item
-              label={
-                <span>
-                  Nickname&nbsp;
-                  <Tooltip title="What do you want others to call you?">
-                    <Icon type="question-circle-o" />
-                  </Tooltip>
-                </span>
-              }
-            >
-              {getFieldDecorator('nickname', {
-                rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-              })(<Input />)}
-            </Form.Item>
-
             <Form.Item label="Phone Number">
-              {getFieldDecorator('phone', {
-                rules: [{ required: true, message: 'Please input your phone number!' }],
+              {getFieldDecorator('phone1', {
+                rules: [{ required: true, message: `Please input your company's phone number!` }],
               })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
             </Form.Item>
-
-            <Form.Item {...tailFormItemLayout}>
-              {getFieldDecorator('agreement', {
-                valuePropName: 'checked',
-              })(
-                <Checkbox>
-                  I have read the <a href="">agreement</a>
-                </Checkbox>,
-              )}
-            </Form.Item> */}
 
             <Form.Item {...buttonFormItemLayout}>
               <Button type="default" onClick={this.previous} style={{ width: 100, margin: 10 }}>

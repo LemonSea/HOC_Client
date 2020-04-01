@@ -36,16 +36,20 @@ class RegAccount extends Component {
   }
 
   previous = () => {
-    this.props.history.push('/reg-officer')
+    this.props.history.push('/reg-firm')
   }
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-
-        this.props.history.push('/reg-done')
+        if(values.agreement) {
+          console.log('Received values of form: ', values);
+  
+          this.props.history.push('/reg-done')
+        } else {
+          message.warn('you mast agree to the agreement!')
+        }
       }
     });
   };
@@ -115,14 +119,6 @@ class RegAccount extends Component {
       },
     };
 
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86',
-    })(
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>,
-    );
 
     return (
       <div style={{ background: '#ECECEC', padding: '30px' }} >
@@ -133,7 +129,7 @@ class RegAccount extends Component {
           // hoverable={true}
           headStyle={{ fontSize: 20 }}
         >
-          <Steps>            
+          <Steps>
             <Step status="finish" title="负责人信息" icon={<Icon type="user" />} />
             {/* <Step status="process" title="Login" icon={<Icon type="user" />} /> */}
             <Step status="finish" title="公司信息" icon={<Icon type="solution" />} />
@@ -142,22 +138,33 @@ class RegAccount extends Component {
           </Steps>
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
 
-            <Form.Item label="E-mail">
-              {getFieldDecorator('email', {
+            <Form.Item
+              label={
+                <span>
+                  Nickname&nbsp;
+                  <Tooltip title="What do you want others to call you?">
+                    <Icon type="question-circle-o" />
+                  </Tooltip>
+                </span>
+              }
+            >
+              {getFieldDecorator('nickname', {
+                rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item label="Account" hasFeedback>
+              {getFieldDecorator('account', {
                 rules: [
                   {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                  {
                     required: true,
-                    message: 'Please input your E-mail!',
-                  },
+                    message: 'Please input your account!',
+                  }
                 ],
               })(<Input />)}
             </Form.Item>
 
-            {/* <Form.Item label="Password" hasFeedback>
+            <Form.Item label="Password" hasFeedback>
               {getFieldDecorator('password', {
                 rules: [
                   {
@@ -186,27 +193,6 @@ class RegAccount extends Component {
               })(<Input.Password onBlur={this.handleConfirmBlur} />)}
             </Form.Item>
 
-            <Form.Item
-              label={
-                <span>
-                  Nickname&nbsp;
-                  <Tooltip title="What do you want others to call you?">
-                    <Icon type="question-circle-o" />
-                  </Tooltip>
-                </span>
-              }
-            >
-              {getFieldDecorator('nickname', {
-                rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-              })(<Input />)}
-            </Form.Item>
-
-            <Form.Item label="Phone Number">
-              {getFieldDecorator('phone', {
-                rules: [{ required: true, message: 'Please input your phone number!' }],
-              })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
-            </Form.Item>
-
             <Form.Item {...tailFormItemLayout}>
               {getFieldDecorator('agreement', {
                 valuePropName: 'checked',
@@ -215,7 +201,7 @@ class RegAccount extends Component {
                   I have read the <a href="">agreement</a>
                 </Checkbox>,
               )}
-            </Form.Item> */}
+            </Form.Item>
 
             <Form.Item {...buttonFormItemLayout}>
               <Button type="default" onClick={this.previous} style={{ width: 100, margin: 10 }}>

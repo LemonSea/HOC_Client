@@ -18,7 +18,9 @@ import {
   Button,
   AutoComplete,
   Steps,
-  message
+  message,
+  Radio,
+  DatePicker
 } from 'antd';
 import LinkButton from '../../components/link-button';
 
@@ -39,9 +41,12 @@ class RegOfficer extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        const birthday = values['birthday'].format('YYYY-MM-DD');
+        // console.log('birthday', birthday)
+        values.birthday = birthday;
         console.log('Received values of form: ', values);
         message.success('register officer success!')
-        
+
         this.props.history.push('/reg-firm')
       }
     });
@@ -109,6 +114,10 @@ class RegOfficer extends Component {
       </Select>,
     );
 
+    const datePickerConfig = {
+      rules: [{ type: 'object', required: true, message: 'Please select you birthday!' }],
+    };
+
     return (
       <div style={{ background: '#ECECEC', padding: '30px' }} >
         <Card
@@ -127,6 +136,33 @@ class RegOfficer extends Component {
           </Steps>
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
 
+            <Form.Item label="realName">
+              {getFieldDecorator('realName', {
+                rules: [{ required: true, message: 'Please input your realName!' }],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item label="IDCard">
+              {getFieldDecorator('IDCard', {
+                rules: [{ required: true, message: 'Please input your IDCard!' }],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item label="gender">
+              {getFieldDecorator('gender', {
+                rules: [{ required: true, message: 'Please input your gender!' }],
+              })(
+                <Radio.Group>
+                  <Radio value="0">女</Radio>
+                  <Radio value="1">男</Radio>
+                </Radio.Group>,
+              )}
+            </Form.Item>
+
+            <Form.Item label="birthday">
+              {getFieldDecorator('birthday', datePickerConfig)(<DatePicker />)}
+            </Form.Item>
+
             <Form.Item label="E-mail">
               {getFieldDecorator('email', {
                 rules: [
@@ -142,36 +178,7 @@ class RegOfficer extends Component {
               })(<Input />)}
             </Form.Item>
 
-            <Form.Item label="Password" hasFeedback>
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your password!',
-                  },
-                  {
-                    validator: this.validateToNextPassword,
-                  },
-                ],
-              })(<Input.Password />)}
-
-            </Form.Item>
-
-            <Form.Item label="Confirm Password" hasFeedback>
-              {getFieldDecorator('confirm', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please confirm your password!',
-                  },
-                  {
-                    validator: this.compareToFirstPassword,
-                  },
-                ],
-              })(<Input.Password onBlur={this.handleConfirmBlur} />)}
-            </Form.Item>
-
-            <Form.Item
+            {/* <Form.Item
               label={
                 <span>
                   Nickname&nbsp;
@@ -184,7 +191,7 @@ class RegOfficer extends Component {
               {getFieldDecorator('nickname', {
                 rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
               })(<Input />)}
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item label="Phone Number">
               {getFieldDecorator('phone', {
@@ -203,8 +210,8 @@ class RegOfficer extends Component {
             </Form.Item> */}
 
             <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit" style={{ width: 200 }}>
-                  Next
+              <Button type="primary" htmlType="submit" style={{ width: 200 }}>
+                Next
               </Button>
             </Form.Item>
           </Form>
