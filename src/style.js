@@ -23,7 +23,7 @@ time, mark, audio, video{
   vertical-align: baseline;
 }
 body {
-  background-color:#F6F6F8;
+  background-color:#ECECEC;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 

@@ -6,9 +6,14 @@ import { Provider } from 'react-redux';
 import store from './store/index';
 
 
+import Main from './pages/main/index';
 import Login from './pages/login/index';
 import Register from './pages/register/index';
-import Main from './pages/main/index';
+// 注册公司的界面
+import RegOfficer from './pages/regFirm/reg-officer';
+import RegFirm from './pages/regFirm/reg-firm';
+import RegAccount from './pages/regFirm/reg-account';
+import RegDone from './pages/regFirm/reg-done';
 // 404 界面
 import NotFound from './pages/not-found/not-found';
 
@@ -21,6 +26,11 @@ function App() {
         <Switch>
           <Redirect exact from='/' to='/home' />
           <Route path='/login' component={Login}></Route>
+          <Route path='/register' component={Register}></Route>
+          <Route path='/reg-officer' component={RegOfficer}></Route>
+          <Route path='/reg-firm' component={RegFirm}></Route>
+          <Route path='/reg-account' component={RegAccount}></Route>
+          <Route path='/reg-done' component={RegDone}></Route>
           <Route path='/' component={Main}></Route>
           <Route component={NotFound} />
         </Switch>

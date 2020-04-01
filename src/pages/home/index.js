@@ -9,21 +9,25 @@ import {
 import SliderBox from './common/SliderBox';
 import JobMenu from './common/JobMenu';
 import TabBox from './common/TabBox';
+import SearchPart from './common/SearchBox';
 
 
 class Home extends Component {
   render() {
     return (
-      <HomeWrapper>
-        <HomeAdvertise>
-          <JobMenu />
-          <SliderBox />
-        </HomeAdvertise>
+      <div style={{ marginTop: 10 }}>
+        <HomeWrapper>
+          <SearchPart />
+          
+          <HomeAdvertise>
+            <JobMenu />
+            <SliderBox />
+          </HomeAdvertise>
 
-        <TabBox />
-      </HomeWrapper>
-
-      // <div>Home</div>
+          <TabBox />
+        </HomeWrapper>
+        home
+      </div>
     )
   }
 }
