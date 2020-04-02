@@ -45,7 +45,10 @@ class RegAccount extends Component {
       if (!err) {
         if(values.agreement) {
           console.log('Received values of form: ', values);
-  
+          const firm = this.props.firm.toJS();
+          const officer= this.props.officer.toJS();
+          console.log('Received firm: ', firm);
+          console.log('Received officer : ', officer);
           this.props.history.push('/reg-done')
         } else {
           message.warn('you mast agree to the agreement!')
@@ -84,7 +87,7 @@ class RegAccount extends Component {
     const { } = this.props;
 
     // state to props
-    const { } = this.props;
+    const { firm, officer  } = this.props;
     // const listJS = list ? list.toJS() : [];
 
     const { getFieldDecorator } = this.props.form;
@@ -223,6 +226,8 @@ class RegAccount extends Component {
 
 
 const mapStateToProps = (state) => ({
+  officer: state.getIn(['regFirmReducer', 'officer']),
+  firm: state.getIn(['regFirmReducer', 'firm']),
 })
 
 const mapDispatchToProps = (dispatch) => ({

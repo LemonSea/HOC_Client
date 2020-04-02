@@ -47,8 +47,22 @@ class RegFirm extends Component {
       if (!err) {
         const imgs = this.pw.current.getImgs()
         console.log('imgs: ', imgs);
+        values.imgs = imgs;
+        values.phone1 = {
+          phone1: values.phone1,
+          prefix1: values.prefix1
+        };
+        values.phone2 = {
+          phone2: values.phone2,
+          prefix2: values.prefix2
+        };
+        values.phone3 = {
+          phone3: values.phone3,
+          prefix3: values.prefix3
+        };
+        this.props.getFirm(values)
         console.log('Received values of form: ', values);
-
+        message.success('register firm success!')
         this.props.history.push('/reg-account')
       }
     });
@@ -119,7 +133,23 @@ class RegFirm extends Component {
       },
     };
 
-    const prefixSelector = getFieldDecorator('prefix', {
+    const prefixSelector1 = getFieldDecorator('prefix1', {
+      initialValue: '86',
+    })(
+      <Select style={{ width: 70 }}>
+        <Option value="86">+86</Option>
+        <Option value="87">+87</Option>
+      </Select>,
+    );
+    const prefixSelector2 = getFieldDecorator('prefix2', {
+      initialValue: '86',
+    })(
+      <Select style={{ width: 70 }}>
+        <Option value="86">+86</Option>
+        <Option value="87">+87</Option>
+      </Select>,
+    );
+    const prefixSelector3 = getFieldDecorator('prefix3', {
       initialValue: '86',
     })(
       <Select style={{ width: 70 }}>
@@ -190,7 +220,19 @@ class RegFirm extends Component {
             <Form.Item label="Phone Number">
               {getFieldDecorator('phone1', {
                 rules: [{ required: true, message: `Please input your company's phone number!` }],
-              })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
+              })(<Input addonBefore={prefixSelector1} style={{ width: '100%' }} />)}
+            </Form.Item>
+
+            <Form.Item label="Phone Number">
+              {getFieldDecorator('phone2', {
+                rules: [{ required: true, message: `Please input your company's phone number!` }],
+              })(<Input addonBefore={prefixSelector2} style={{ width: '100%' }} />)}
+            </Form.Item>
+
+            <Form.Item label="Phone Number">
+              {getFieldDecorator('phone3', {
+                rules: [{ required: true, message: `Please input your company's phone number!` }],
+              })(<Input addonBefore={prefixSelector3} style={{ width: '100%' }} />)}
             </Form.Item>
 
             <Form.Item {...buttonFormItemLayout}>
@@ -216,6 +258,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+  getFirm(data) {
+    dispatch(actionCreators.getFirm(data));
+  }
 })
 
 const WrappedRegistrationForm = Form.create({ name: 'register' })(RegFirm);

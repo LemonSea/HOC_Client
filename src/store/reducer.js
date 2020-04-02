@@ -4,11 +4,13 @@ import { combineReducers } from 'redux-immutable';
 // 导入分仓库的 reducer
 import { reducer as headerReducer}  from '../common/header/store';
 import { reducer as mainReducer}  from '../pages/main/store';
+import { reducer as regFirmReducer}  from '../pages/regFirm/store';
 
 // 合并 reducer 函数为一个 obj
 const reducer = combineReducers({
     header: headerReducer,
-    mainReducer
+    mainReducer,
+    regFirmReducer
 })
 
 export default reducer

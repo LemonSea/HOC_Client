@@ -44,9 +44,13 @@ class RegOfficer extends Component {
         const birthday = values['birthday'].format('YYYY-MM-DD');
         // console.log('birthday', birthday)
         values.birthday = birthday;
+        values.phone = {
+          phone: values.phone,
+          prefix: values.prefix
+        };
         console.log('Received values of form: ', values);
+        this.props.getOfficer(values)
         message.success('register officer success!')
-
         this.props.history.push('/reg-firm')
       }
     });
@@ -229,7 +233,10 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+  getOfficer(data) {
+    dispatch(actionCreators.getOfficer(data));
+  }
 })
 
-const WrappedRegistrationForm = Form.create({ name: 'register' })(RegOfficer);
+const WrappedRegistrationForm = Form.create({ name: 'reg-officer' })(RegOfficer);
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(WrappedRegistrationForm))
