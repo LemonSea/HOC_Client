@@ -1,6 +1,7 @@
 import React from 'react';
 import { GlobalStyle } from './style';
 import { GlobalIconfont } from './static/iconfont/iconfont';
+import {BackGroundStyle } from './assets/backgroundColor';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store/index';

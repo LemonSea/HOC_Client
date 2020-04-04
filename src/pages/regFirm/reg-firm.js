@@ -225,13 +225,13 @@ class RegFirm extends Component {
 
             <Form.Item label="Phone Number">
               {getFieldDecorator('phone2', {
-                rules: [{ required: true, message: `Please input your company's phone number!` }],
+                // rules: [{ required: true, message: `Please input your company's phone number!` }],
               })(<Input addonBefore={prefixSelector2} style={{ width: '100%' }} />)}
             </Form.Item>
 
             <Form.Item label="Phone Number">
               {getFieldDecorator('phone3', {
-                rules: [{ required: true, message: `Please input your company's phone number!` }],
+                // rules: [{ required: true, message: `Please input your company's phone number!` }],
               })(<Input addonBefore={prefixSelector3} style={{ width: '100%' }} />)}
             </Form.Item>
 

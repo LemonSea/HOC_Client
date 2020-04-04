@@ -31,6 +31,7 @@ class Main extends Component {
 
   componentWillMount() {
     this.props.getStaffType(this.props.staffType)
+    this.props.getRole(this.props.role)
   }
 
   render() {
@@ -62,12 +63,18 @@ class Main extends Component {
 
 const mapStateToProps = (state) => ({
   staffType: state.getIn(['mainReducer', 'staffType']),
+  role: state.getIn(['mainReducer', 'role']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getStaffType(staffType) {
     if(staffType.toJS().length === 0) {
       dispatch(actionCreators.getStaffType());
+    }
+  },
+  getRole(role) {
+    if(role.toJS().length === 0) {
+      dispatch(actionCreators.getRole());
     }
   },
 })

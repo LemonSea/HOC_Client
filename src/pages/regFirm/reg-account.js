@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-
 import {
   Card,
   Form,
@@ -21,6 +20,8 @@ import {
   message
 } from 'antd';
 import LinkButton from '../../components/link-button';
+
+import { addUserHead, addCompany, addCompanyAuditRecord } from './api'
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -41,20 +42,53 @@ class RegAccount extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        if(values.agreement) {
-          console.log('Received values of form: ', values);
-          const firm = this.props.firm.toJS();
-          const officer= this.props.officer.toJS();
-          console.log('Received firm: ', firm);
+        if (values.agreement) {
+          /**
+           * 注册公司负责人的信息
+           */
+          const officer = this.props.officer.toJS();
+          officer.nickname = values.nickname;
+          officer.isHead = true;
+          officer.isAdmin = true;
+          officer.role = '5e87fb4360916a18dcfa383b';
+          officer.account = values.account;
+          officer.password = values.password;
           console.log('Received officer : ', officer);
-          this.props.history.push('/reg-done')
+          const result = await addUserHead(officer)
+          if (result.status === 0) {
+            console.log('result.data', result.data._id)
+            /**
+             * 注册公司
+             */
+            const firm = this.props.firm.toJS();
+            console.log('Received firm: ', firm);
+            firm.Officer = result.data._id;
+            const resultCompany = await addCompany(firm)
+            if (resultCompany.status === 0) {
+              console.log('resultCompany.data', resultCompany.data)
+              /**
+               * 记录公司记录
+               */
+              const company = resultCompany.data._id;
+              const resultRecord = await addCompanyAuditRecord(company)
+              if (resultRecord.status === 0) {
+                message.success('注册成功!');
+                this.props.history.push('/reg-done')
+              }
+            } else {
+              message.warn('注册失败!');
+            }
+          } else {
+            message.warn('注册失败!');
+          }
         } else {
           message.warn('you mast agree to the agreement!')
         }
       }
-    });
+    }
+    )
   };
 
   handleConfirmBlur = e => {
@@ -87,7 +121,7 @@ class RegAccount extends Component {
     const { } = this.props;
 
     // state to props
-    const { firm, officer  } = this.props;
+    const { firm, officer } = this.props;
     // const listJS = list ? list.toJS() : [];
 
     const { getFieldDecorator } = this.props.form;
@@ -228,6 +262,7 @@ class RegAccount extends Component {
 const mapStateToProps = (state) => ({
   officer: state.getIn(['regFirmReducer', 'officer']),
   firm: state.getIn(['regFirmReducer', 'firm']),
+  role: state.getIn(['regFirmReducer', 'firm']),
 })
 
 const mapDispatchToProps = (dispatch) => ({

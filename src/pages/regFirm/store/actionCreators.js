@@ -11,12 +11,14 @@ const redOfficer = (data) => ({
   type: actionTypes.RED_OFFICER,
   data: fromJS(data)
 });
+
 const redFirm = (data) => ({
   type: actionTypes.RED_FIRM,
   data: fromJS(data)
 });
+
 const redAccount = (data) => ({
-  type: actionTypes.RED_FIRM,
+  type: actionTypes.RED_ACCOUNT,
   data: fromJS(data)
 });
 
@@ -36,3 +38,4 @@ export const getAccount = (data) => {
       dispatch(redAccount(data))
   }
 }
+

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Upload, Icon, Modal } from 'antd';
 import { message } from 'antd'
-import { BASE_IMG_URL } from '../../utils/constant';
+import { BASE_IMG_URL,BASE_URL } from '../../utils/constant';
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -98,7 +98,7 @@ class PicturesWall extends React.Component {
     return (
       <div>
         <Upload
-          action="http://localhost:8080/api/v1/upload/company/pic"  // 上传 api
+          action={ BASE_URL + "/upload/company/pic"}  // 上传 api
           accept='image/*'  // 只查看图片
           name='image'  // 请求参数名
           listType="picture-card"  // 卡片样式

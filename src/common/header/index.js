@@ -3,27 +3,57 @@ import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import { Link } from 'react-router-dom';
 import { actionCreators } from './store';
+import { actionCreators as loginActionCreators } from '../../pages/login/store';
+import { BASE_IMG_URL } from '../../utils/constant';
 import {
   HeaderWrapper,
   Logo,
   Nav,
   NavItem,
   Addition,
-  Button
+  Button,
+  AdditionUser,
+  DropDown
 } from './style';
-import { Input, Select } from 'antd';
+import { Input, Select, Avatar, Modal } from 'antd';
 
 const { Group, Search } = Input;
 const { Option } = Select;
 
 const Header = (props) => {
 
-  const selectChange = (value) => {
-    console.log(`selected ${value}`);
+  const handleInputFocus = () => {
+    console.log('handleInputFocus')
+    props.dropDownFocus()
   }
-  const searchChange = (value) => {
-    console.log(`search ${value}`);
+
+  const handleInputBlur = () => {
+    console.log('handleInputBlur')
+    props.dropDownBlur()
   }
+
+  const logout = () => {
+    Modal.confirm({
+      title: '确定退出吗?',
+      onOk() {
+        props.layoutDispatch()
+        console.log(props)
+        // props.history.replace('/')
+        // props.history.push('/home')
+      },
+      // onCancel() {
+      //     console.log('Cancel');
+      // }
+    })
+  }
+
+  // dispatch to props
+  const { } = props;
+
+  // state to props
+  const { loginStatus, currentUser, focused } = props;
+  const currentUserJS = currentUser ? currentUser.toJS() : [];
+  // console.log('currentUserJS', currentUserJS)
 
   return (
     <div style={{ zIndex: 9999 }}>
@@ -37,29 +67,51 @@ const Header = (props) => {
           <Link to="/reg-officer"><NavItem className='right'>注册公司</NavItem></Link>
         </Nav>
 
-        <Addition>
-          <Link to="/login"><Button className='login'>登录</Button></Link>
-          <Link to="/register"><Button>注册</Button></Link>
-        </Addition>
+        {
+          loginStatus === false
+            ? (<Addition>
+              <Link to="/login"><Button className='login'>登录</Button></Link>
+              <Link to="/register"><Button>注册</Button></Link>
+            </Addition>)
+            : (<AdditionUser
+              onMouseEnter={handleInputFocus}
+              onMouseLeave={handleInputBlur}
+            >
+              {/* <Link to="/login"><Button className='login'>登录</Button></Link>
+              <Link to="/register"><Button>注册</Button></Link> */}
+              <span className='name'>{currentUserJS.nickname}</span>
+              <Avatar size="large" style={{ backgroundColor: '#fff', marginBottom: 10 }} src={BASE_IMG_URL + currentUserJS.avatar} />
+              <DropDown
+                className={focused ? 'focused' : 'blur'}
+              >
+                <div onClick={() => { console.log('个人中心') }}>个人中心</div>
+                <div onClick={logout}>登出</div>
+              </DropDown>
+            </AdditionUser>)
+        }
+
       </HeaderWrapper>
     </div >
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    focused: state.getIn(['header', 'focused'])
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleInputFocus() {
-      dispatch(actionCreators.searchFocus())
-    },
-    handleInputBlur() {
-      dispatch(actionCreators.searchBlur())
-    }
-  }
-}
+const mapStateToProps = (state) => ({
+  loginStatus: state.getIn(['loginReducer', 'loginStatus']),
+  currentUser: state.getIn(['loginReducer', 'currentUser']),
+
+  focused: state.getIn(['header', 'focused']),
+
+})
+const mapDispatchToProps = (dispatch) => ({
+  dropDownFocus() {
+    dispatch(actionCreators.dropDownFocus());
+  },
+  dropDownBlur() {
+    dispatch(actionCreators.dropDownBlur());
+  },
+  layoutDispatch() {
+    dispatch(loginActionCreators.postLayoutRequest());
+  },
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

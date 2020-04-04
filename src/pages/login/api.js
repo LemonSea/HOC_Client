@@ -1,12 +1,15 @@
 // 导入网络请求
+// import { postLoginRequest } from '../../../api/request';
 import { axiosAuthInstance } from "../../api/config";
 
-export const reqStaffType = () => {
+// 登录
+export const reqLogin = (data) => {
     try {
         const result = axiosAuthInstance({
-            method: "GET",
+            method: "POST",
             headers: { 'Content-type': 'application/json', },
-            url: 'staffStatus/type',
+            url: 'users/login',
+            data: data,
         })
         return result;
     } catch (error) {
@@ -14,12 +17,14 @@ export const reqStaffType = () => {
     }
 }
 
-// 获取 StaffTypeList 数据
-export const reqRole = () => {
+// 注册
+export const reqRegister = (data) => {
     try {
         const result = axiosAuthInstance({
-            method: "GET",
-            url: 'role/list',
+            method: "POST",
+            headers: { 'Content-type': 'application/json', },
+            url: 'users/register',
+            data: data,
         })
         return result;
     } catch (error) {
