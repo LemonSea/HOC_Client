@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Divider,
   Tabs,
@@ -11,16 +12,20 @@ import {
 } from '../style';
 
 const { TabPane } = Tabs;
-const operations = <Button>Extra Action</Button>;
+const operations = <Link to="/staff"><Button onClick={() => {}}>Extra Action</Button></Link>;
 
 class TabBox extends Component {
+
+  callback = (key) => {
+    console.log(key);
+  }
 
   render() {
     return (
       <CommonBox>
-        <Divider style={{ fontSize: 30 }}>好评公司</Divider>
-        <Tabs tabBarExtraContent={operations}>
-          <TabPane tab={<span><Icon type="apple" />Tab 1</span>} key="1">
+        <Divider style={{ fontSize: 30 }}>推荐员工</Divider>
+        <Tabs tabBarExtraContent={operations} onChange={this.callback}>
+          <TabPane tab="Tab 1" key="1">
             Content of tab 1
           </TabPane>
           <TabPane tab="Tab 2" key="2">

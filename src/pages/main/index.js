@@ -5,7 +5,8 @@ import * as actionCreators from './store/actionCreators';
 
 import {
   BackTop,
-  Affix
+  Affix,
+  Layout
 } from 'antd';
 
 import Header from '../../common/header';
@@ -22,6 +23,7 @@ import Brand from '../brand/index';
 // 职员信息
 import Staff from '../staff/index';
 
+const { Footer, Sider, Content } = Layout;
 class Main extends Component {
 
   state = {
@@ -39,6 +41,7 @@ class Main extends Component {
     const { } = this.props;
     // state to props
     const { } = this.props;
+    // console.log('currentUserJS', currentUserJS)
 
     return (
       <div>

@@ -5,40 +5,40 @@ import { fromJS } from 'immutable';
 // 导入网络请求
 // import { postLoginRequest } from '../../../api/request';
 import { axiosInstance, axiosAuthInstance } from "../../../api/config";
-import { reqStaffType, reqRole } from '../api';
+import {  reqFirmRecommend, reqStaffRecommend } from '../api';
 
-const redStaffType = (data) => ({
-  type: actionTypes.GET_STAFFTYPE,
+const redFirmRecommend = (data) => ({
+  type: actionTypes.FIRM_RECOMMEND,
   data: fromJS(data)
 });
-const redRole = (data) => ({
-  type: actionTypes.GET_ROLE,
+const redStaffRecommend = (data) => ({
+  type: actionTypes.STAFF_RECOMMEND,
   data: fromJS(data)
 });
 
-// 获取员工类型数据
-export const getStaffType = () => {
+// 获取推荐公司
+export const getFirmRecommend = () => {
   return async (dispatch) => {
-    const result = await reqStaffType()
-    // console.log(result)
+    const result = await reqFirmRecommend()
     if (result.status === 0) {  
       // console.log(result)    
-      dispatch(redStaffType(result.data))
+      dispatch(redFirmRecommend(result.data))
     } else {
       console.error(result);      
     }
   }
 }
 
-// 获取角色数据
-export const getRole = () => {
+// 获取推荐员工
+export const getStaffRecommend = () => {
   return async (dispatch) => {
-    const result = await reqRole()
+    const result = await reqStaffRecommend()
     if (result.status === 0) {  
-      // console.log(result)    
-      dispatch(redRole(result.data))
+      console.log(result)    
+      dispatch(redStaffRecommend(result.data))
     } else {
       console.error(result);      
     }
   }
 }
+

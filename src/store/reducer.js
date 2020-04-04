@@ -6,13 +6,19 @@ import { reducer as headerReducer}  from '../common/header/store';
 import { reducer as loginReducer}  from '../pages/login/store';
 import { reducer as mainReducer}  from '../pages/main/store';
 import { reducer as regFirmReducer}  from '../pages/regFirm/store';
+import { reducer as homeReducer}  from '../pages/home/store';
+import { reducer as staffReducer}  from '../pages/staff/store';
+import { reducer as brandReducer}  from '../pages/brand/store';
 
 // 合并 reducer 函数为一个 obj
 const reducer = combineReducers({
     header: headerReducer,
     loginReducer,
     mainReducer,
-    regFirmReducer
+    regFirmReducer,
+    homeReducer,
+    staffReducer,
+    brandReducer
 })
 
 export default reducer
