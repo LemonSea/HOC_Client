@@ -22,6 +22,8 @@ import Home from '../home/index';
 import Brand from '../brand/index';
 // 职员信息
 import Staff from '../staff/index';
+// 详情页
+import BrandDetail from '../brandDetail/index';
 
 const { Footer, Sider, Content } = Layout;
 class Main extends Component {
@@ -55,6 +57,8 @@ class Main extends Component {
           <Route path='/brand' component={Brand}></Route>
           <Route path='/staff' component={Staff}></Route>
 
+          <Route path='/brandDetail' component={BrandDetail}></Route>
+
           <Route component={NotFound} />
         </Switch>
         <BackTop />
@@ -82,4 +86,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main)
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Main))

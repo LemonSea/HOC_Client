@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../store/actionCreators';
 import { PAGE_SIZE, BASE_IMG_URL } from '../../../utils/constant';
 
-import { List, Avatar, Icon } from 'antd';
+import { List, Avatar, Icon, Button } from 'antd';
 
 // const listData = [];
 // for (let i = 0; i < 23; i++) {
@@ -27,7 +27,14 @@ const IconText = ({ type, text }) => (
 );
 
 
+
+
 class BrandList extends Component {
+
+  details = (item) => {
+    console.log(item)
+    this.props.history.push('/brandDetail', { item: item })
+  }
 
   componentDidMount() {
     this.props.getList(1, '', '', this.props.currentUser.toJS())
@@ -64,8 +71,9 @@ class BrandList extends Component {
         }
         renderItem={item => (
           <List.Item
-            key={item.title}
+            key={item._id}
             actions={[
+              <Button onClick={() => { this.details(item) }}>查看详情</Button>,
               // <IconText type="star-o" text={'星级：' + item.star} key="list-vertical-star-o" />,
               // <IconText type="like-o" text="156" key="list-vertical-like-o" />,
               // <IconText type="message" text="2" key="list-vertical-message" />,
@@ -92,9 +100,9 @@ class BrandList extends Component {
             <br />
             客服电话-1：{item.phone1.phone1 + '+' + item.phone1.prefix1}
             &emsp; |&emsp;
-            客服电话-2：{item.phone2.phone2 + '+' +item.phone2.prefix2}
+            客服电话-2：{item.phone2.phone2 + '+' + item.phone2.prefix2}
             &emsp; |&emsp;
-            客服电话-3：{item.phone3.phone3 + '+' +item.phone3.prefix3}
+            客服电话-3：{item.phone3.phone3 + '+' + item.phone3.prefix3}
           </List.Item>
         )}
       />

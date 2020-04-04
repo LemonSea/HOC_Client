@@ -5,19 +5,10 @@ import { fromJS } from 'immutable';
 
 // 这里用到fromJS把JS数据结构转化成immutable数据结构
 const defaultState = fromJS({
-    list: [],  // 公司列表
-    total: 0, // 分页总数量
-    pageNum: 1,
 });
 
 export default (state = defaultState, action) => {
     switch (action.type) {
-        case actionTypes.GET_LIST:
-            return state.merge({
-                list: action.list,
-                total: action.total,
-                pageNum: action.pageNum
-            });
         default:
             return state;
     }

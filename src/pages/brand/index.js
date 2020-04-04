@@ -29,7 +29,7 @@ class Brand extends Component {
 
           <FilterCondition staffType={staffTypeJS} />
 
-          <BrandList />
+          <BrandList history={this.props.history}/>
           {/* <HomeAdvertise>
             <JobMenu />
             <SliderBox />
