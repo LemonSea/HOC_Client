@@ -35,7 +35,7 @@ class Staff extends Component {
 
           <FilterCondition staffType={staffTypeJS} />
 
-          <StaffList />
+          <StaffList  history={this.props.history}/>
           {/* <HomeAdvertise>
             <JobMenu />
             <SliderBox />

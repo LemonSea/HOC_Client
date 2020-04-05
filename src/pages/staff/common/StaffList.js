@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../store/actionCreators';
 import { PAGE_SIZE, BASE_IMG_URL } from '../../../utils/constant';
 
-import { List, Avatar, Icon } from 'antd';
+import { List, Avatar, Icon,Button } from 'antd';
 
 // const listData = [];
 // for (let i = 0; i < 23; i++) {
@@ -28,6 +28,11 @@ const IconText = ({ type, text }) => (
 
 
 class StaffList extends Component {
+
+  details = (item) => {
+    console.log(item)
+    this.props.history.push('/staffDetail', { item: item })
+  }
 
   componentDidMount() {
     this.props.getList(1, '', '', this.props.currentUser.toJS())
@@ -70,6 +75,7 @@ class StaffList extends Component {
               <IconText type="like-o" text="156" key="list-vertical-like-o" />,
               <IconText type="message" text="2" key="list-vertical-message" />,
               <IconText type="carry-out" text={item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
+              <Button onClick={() => { this.details(item) }}>查看详情</Button>,
             ]}
             extra={
               <img
@@ -105,7 +111,7 @@ class StaffList extends Component {
             &emsp; |&emsp;
             好评订单数：{item.highPraiseOrder}
             &emsp; |&emsp;
-            费用：{item.costHour}
+            费用：{item.costHour} 元/小时
           </List.Item>
         )}
       />

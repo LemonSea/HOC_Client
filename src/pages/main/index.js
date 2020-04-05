@@ -24,6 +24,11 @@ import Brand from '../brand/index';
 import Staff from '../staff/index';
 // 详情页
 import BrandDetail from '../brandDetail/index';
+import StaffDetail from '../staffDetail/index';
+// 预约
+import AppointmentSure from '../staffDetail/appointment-sure';
+import AppointmentPay from '../staffDetail/appointment-pay';
+import AppointmentDone from '../staffDetail/appointment-done';
 
 const { Footer, Sider, Content } = Layout;
 class Main extends Component {
@@ -58,6 +63,10 @@ class Main extends Component {
           <Route path='/staff' component={Staff}></Route>
 
           <Route path='/brandDetail' component={BrandDetail}></Route>
+          <Route path='/staffDetail' component={StaffDetail}></Route>
+          <Route path='/appointment-sure' component={AppointmentSure}></Route>
+          <Route path='/appointment-pay' component={AppointmentPay}></Route>
+          <Route path='/appointment-done' component={AppointmentDone}></Route>
 
           <Route component={NotFound} />
         </Switch>

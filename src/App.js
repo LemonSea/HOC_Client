@@ -25,9 +25,12 @@ function App() {
       <GlobalIconfont />
         <Router>
         <Switch>
+          {/* 首页 */}
           <Redirect exact from='/' to='/home' />
+          {/* 用户注册与登录 */}
           <Route path='/login' component={Login}></Route>
           <Route path='/register' component={Register}></Route>
+          {/* 公司注册 */}
           <Route path='/reg-officer' component={RegOfficer}></Route>
           <Route path='/reg-firm' component={RegFirm}></Route>
           <Route path='/reg-account' component={RegAccount}></Route>
