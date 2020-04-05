@@ -47,7 +47,7 @@ class AppointmentSure extends Component {
         const { item } = this.props.location.state
         console.log('orderSub', value)
         const formData = {
-          user: currentUser._id,
+          user: currentUserJS._id,
           employee: item._id,
           company: item.company._id,
           address: value.address,
@@ -58,7 +58,7 @@ class AppointmentSure extends Component {
           amount: item.costHour * item.countTime.countHours,
           startTime: item.startTime,
           endTime:item.endTime,
-          countTime: value.countTime,
+          countTime: item.countTime,
           status: 0,
           note: value.describe,
           firstTime: new Date()
@@ -69,8 +69,7 @@ class AppointmentSure extends Component {
           console.log(result.data)
           message.success('提交订单成功!');
           this.props.history.push('/appointment-pay', { item: result.data })
-          // this.setState({ isShowAuth: false });
-          // this.props.getList(pageNum)
+          console.log('formData',formData)
         } else {
           message.warn('提交订单失败!');
         }

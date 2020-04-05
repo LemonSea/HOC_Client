@@ -85,6 +85,7 @@ const Header = (props) => {
                 className={focused ? 'focused' : 'blur'}
               >
                 <div onClick={() => { console.log('个人中心') }}>个人中心</div>
+                <Link to='/order-list'><div onClick={() => { console.log('订单查看') }}>订单查看</div></Link>
                 <div onClick={logout}>登出</div>
               </DropDown>
             </AdditionUser>)

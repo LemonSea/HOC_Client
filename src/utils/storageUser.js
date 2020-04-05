@@ -1,7 +1,7 @@
 // storage 数据存储
 import store from 'store'
 
-const USER_KEY = 'user_key'
+const USER_KEY = 'user_client_key'
 
 export const setUser = (user) => {
     // localStorage.setItem(USER_KEY, JSON.stringify(user))

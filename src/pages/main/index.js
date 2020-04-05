@@ -29,6 +29,8 @@ import StaffDetail from '../staffDetail/index';
 import AppointmentSure from '../staffDetail/appointment-sure';
 import AppointmentPay from '../staffDetail/appointment-pay';
 import AppointmentDone from '../staffDetail/appointment-done';
+// 订单
+import OrderList from '../order/order-list';
 
 const { Footer, Sider, Content } = Layout;
 class Main extends Component {
@@ -67,6 +69,8 @@ class Main extends Component {
           <Route path='/appointment-sure' component={AppointmentSure}></Route>
           <Route path='/appointment-pay' component={AppointmentPay}></Route>
           <Route path='/appointment-done' component={AppointmentDone}></Route>
+
+          <Route path='/order-list' component={OrderList}></Route>
 
           <Route component={NotFound} />
         </Switch>

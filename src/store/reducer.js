@@ -9,6 +9,7 @@ import { reducer as regFirmReducer}  from '../pages/regFirm/store';
 import { reducer as homeReducer}  from '../pages/home/store';
 import { reducer as staffReducer}  from '../pages/staff/store';
 import { reducer as brandReducer}  from '../pages/brand/store';
+import { reducer as orderReducer}  from '../pages/order/store';
 
 // 合并 reducer 函数为一个 obj
 const reducer = combineReducers({
@@ -18,7 +19,8 @@ const reducer = combineReducers({
     regFirmReducer,
     homeReducer,
     staffReducer,
-    brandReducer
+    brandReducer,
+    orderReducer
 })
 
 export default reducer
