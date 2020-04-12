@@ -36,8 +36,8 @@ class Login extends Component {
       if (!err) {
         console.log(values)
         this.props.postLoginDispatch(values)
-        message.success('登录成功!');
-        this.props.history.push('/home')
+        // message.success('登录成功!');
+        // this.props.history.push('/home')
         // const result = await addUserHead(officer)
         // if (result.status === 0) {
         //   message.success('注册失败!');

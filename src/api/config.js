@@ -61,8 +61,9 @@ axiosAuthInstance.interceptors.response.use(
         console.log(status, text)
         storageToken.removeToken();
         storageUser.removeUser();
-        alert(text)
-        window.location.href = 'http://localhost:3000/login';
+        alert('登录失败，账号密码错误！')
+        // console.log(text)
+        // window.location.href = 'http://localhost:3000/login';
       } else if (status === 403) {
         console.log(status, text)
         // createHashHistory().push('/login');

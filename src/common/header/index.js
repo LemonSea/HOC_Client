@@ -55,6 +55,17 @@ const Header = (props) => {
   const currentUserJS = currentUser ? currentUser.toJS() : [];
   // console.log('currentUserJS', currentUserJS)
 
+  // 个人信息 link
+  let personalPath = {
+    pathname: '/personal',
+    state: currentUserJS,
+  }
+  // 修改密码 link
+  let accountValidatePath = {
+    pathname: '/account-validate',
+    state: currentUserJS._id,
+  }
+
   return (
     <div style={{ zIndex: 9999 }}>
       <HeaderWrapper>
@@ -84,7 +95,11 @@ const Header = (props) => {
               <DropDown
                 className={focused ? 'focused' : 'blur'}
               >
-                <div onClick={() => { console.log('个人中心') }}>个人中心</div>
+
+                {/* <div onClick={() => { console.log('个人中心') }}>个人中心</div> */}
+                <Link to={personalPath}><div>个人信息</div></Link>
+                <Link to={accountValidatePath}><div>密码修改</div></Link>
+                <Link to='/order-list'><div>地址簿</div></Link>
                 <Link to='/order-list'><div onClick={() => { console.log('订单查看') }}>订单查看</div></Link>
                 <div onClick={logout}>登出</div>
               </DropDown>

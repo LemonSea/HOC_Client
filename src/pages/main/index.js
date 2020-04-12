@@ -31,6 +31,10 @@ import AppointmentPay from '../staffDetail/appointment-pay';
 import AppointmentDone from '../staffDetail/appointment-done';
 // 订单
 import OrderList from '../order/order-list';
+// 个人信息
+import Personal from '../personal/index';
+// 修改密码
+import accountValidate from '../account/account-validate';
 
 const { Footer, Sider, Content } = Layout;
 class Main extends Component {
@@ -71,6 +75,9 @@ class Main extends Component {
           <Route path='/appointment-done' component={AppointmentDone}></Route>
 
           <Route path='/order-list' component={OrderList}></Route>
+
+          <Route path='/personal' component={Personal}></Route>
+          <Route path='/account-validate' component={accountValidate}></Route>
 
           <Route component={NotFound} />
         </Switch>

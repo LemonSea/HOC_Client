@@ -5,7 +5,7 @@ import { fromJS } from 'immutable';
 // 导入网络请求
 // import { postLoginRequest } from '../../../api/request';
 import { axiosInstance, axiosAuthInstance } from "../../../api/config";
-import { reqLogin, reqRegister } from '../api';
+import { reqLogin, reqRegister, reqUpdateUserInfo } from '../api';
 import * as storageUser from '../../../utils/storageUser';
 import * as storageToken from '../../../utils/storageToken';
 
@@ -34,9 +34,12 @@ export const postLoginRequest = (FormData) => {
       storageUser.setUser(result.data)
       storageToken.setToken(result.token)
       dispatch(userLogin(result.data))
+      window.location.href = 'http://localhost:3000/home';
     } else {
       // 登录失败
       dispatch(changeLoginState())
+      alert('账号密码错误！')
+      window.location.href = 'http://localhost:3000/login';
     }
   }
 }
@@ -64,8 +67,24 @@ export const postRegisterDispatch = (FormData) => {
 // 登出
 export const postLayoutRequest = () => {
   return (dispatch) => {
+    storageUser.removeUser()
+    storageToken.removeToken()
+    dispatch(changeLayoutState())
+  }
+}
+
+// 修改个人信息
+export const updateInfoRequest = (_id, data) => {
+  return async (dispatch) => {
+    const result = await reqUpdateUserInfo(_id, data)
+    if (result.status === 0) {
+      console.log('updateInfoRequest', result.data)
       storageUser.removeUser()
-      storageToken.removeToken()
-      dispatch(changeLayoutState())
+      storageUser.setUser(result.data)
+      dispatch(userLogin(result.data))
+    } else {
+      // dispatch(changeLoginState())
+      console.error(result);
+    }
   }
 }

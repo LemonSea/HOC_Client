@@ -31,3 +31,20 @@ export const reqRegister = (data) => {
         console.log('请求出错！', error)
     }
 }
+
+// 修改个人信息
+export const reqUpdateUserInfo = (_id, data) => {
+    try {
+        return axiosAuthInstance({
+            method: "PUT",
+            headers: { 'Content-type': 'application/json', },
+            url: 'users/info',
+            data: {
+                _id: _id,
+                data
+            },
+        })
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}
