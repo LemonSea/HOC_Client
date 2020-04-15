@@ -22,7 +22,7 @@ const getList = (data, total, pageNum) => ({
         try {
             const result = await axiosAuthInstance({
                 method: "GET",
-                url: 'company/admin/officer',
+                url: 'company/client/officer',
                 params: {
                     pageNum: pageNum,
                     pageSize: pageSize

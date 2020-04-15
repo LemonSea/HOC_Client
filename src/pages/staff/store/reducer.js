@@ -8,9 +8,8 @@ const defaultState = fromJS({
     list: [],  // 员工列表
     total: 0, // 分页总数量
     pageNum: 1,
-    searchType: 'name',  // 对应搜索的字段
-    searchName: '',  // 搜索关键字
-    staffType: [],  // 员工类型
+    loading: true,
+    typeItem: '',  // 员工类型
 });
 
 export default (state = defaultState, action) => {
@@ -22,6 +21,8 @@ export default (state = defaultState, action) => {
                 pageNum: action.pageNum,
                 loading: false
             });
+        case actionTypes.CHANGE_TYPE:
+            return state.set('typeItem', action.staffType);
         default:
             return state;
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import { Link } from 'react-router-dom';
@@ -72,8 +72,8 @@ const Header = (props) => {
         <Link to="/"><Logo /></Link>
         <Nav>
           <Link to="/"><NavItem className='left'></NavItem></Link>
-          <Link to="/"><NavItem className='left'>首页</NavItem></Link>
-          <Link to="/staff"><NavItem className='left'>服务人员</NavItem></Link>
+          <Link to="/"><NavItem className='left' >首页</NavItem></Link>
+          <Link to="/staff" ><NavItem className='left' >服务人员</NavItem></Link>
           <Link to="/brand"><NavItem className='left'>服务公司</NavItem></Link>
           <Link to="/reg-officer"><NavItem className='right'>注册公司</NavItem></Link>
         </Nav>

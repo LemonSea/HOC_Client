@@ -86,7 +86,7 @@ export const PositionSel = styled.div`
 `
 
 export const SearchInput = styled.input.attrs({
-  placeholder: '搜索'
+  placeholder: '搜索公司'
 })`
   box-sizing: border-box;
   float: left;

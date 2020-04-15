@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actionCreators from '../store/actionCreators';
 import { PAGE_SIZE, BASE_IMG_URL } from '../../../utils/constant';
+import moment from 'moment';
 
 import { List, Avatar, Icon,Button } from 'antd';
 
@@ -35,7 +36,7 @@ class StaffList extends Component {
   }
 
   componentDidMount() {
-    this.props.getList(1, '', '', this.props.currentUser.toJS())
+    this.props.getList(1)
   }
 
   render() {
@@ -58,7 +59,7 @@ class StaffList extends Component {
           // },
           total,
           showQuickJumper: true,
-          onChange: (pageNum) => { getList(pageNum, this.props.currentUser.toJS()) },
+          onChange: (pageNum) => { getList(pageNum, this.props.typeItem) },
           pageSize: PAGE_SIZE,
         }}
         dataSource={listData}
@@ -97,7 +98,8 @@ class StaffList extends Component {
             &emsp; |&emsp;
             费用：{item.costHour}
             &emsp; |&emsp;
-            入职时间：{item.inductionTime}
+            {/* 入职时间：{item.inductionTime} */}
+            入职时间：{moment(item.inductionTime).format('YYYY-MM-DD')}
             <br />
             <br />
             年龄：{item.age}
@@ -126,18 +128,17 @@ const mapStateToProps = (state) => ({
   // page total
   total: state.getIn(['staffReducer', 'total']),
   pageNum: state.getIn(['staffReducer', 'pageNum']),
-  searchType: state.getIn(['staffReducer', 'searchType']),
-  searchName: state.getIn(['staffReducer', 'searchName']),
+  typeItem: state.getIn(['staffReducer', 'typeItem']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getList(pageNum, searchType, searchName, user) {
-    let _id = '';
-    if (searchName) {
-      dispatch(actionCreators.searchList(pageNum, PAGE_SIZE, searchType, searchName, _id));
+  getList(pageNum, typeItem) {
+    console.log('typeItem',typeItem)
+    if (typeItem) {
+      dispatch(actionCreators.searchList(pageNum, PAGE_SIZE ,typeItem));
     }
     else {
-      dispatch(actionCreators.reqList(pageNum, PAGE_SIZE, _id));
+      dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
     }
   },
 })

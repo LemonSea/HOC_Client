@@ -256,4 +256,9 @@ export const BoxTitle = styled.div`
     
   /* background-color: blue; */
 `
+/**
+ * FilterCondition
+ */
+export const TypeItem = styled.div`
+`
 

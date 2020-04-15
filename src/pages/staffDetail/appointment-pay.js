@@ -139,21 +139,63 @@ class AppointmentPay extends Component {
             <Step status="wait" title="完成订单" icon={<Icon type="lock" />} />
             <Step status="wait" title="评价" icon={<Icon type="smile-o" />} />
           </Steps>
+
+          <List
+            size="large"
+            bordered
+            itemLayout="vertical"
+            size="large"
+          >
+
+            <List.Item
+              key={item.title}
+              // actions={[
+              //   <IconText type="star-o" text={'星级：' + item.star} key="list-vertical-star-o" />,
+              //   // <IconText type="like-o" text="156" key="list-vertical-like-o" />,
+              //   <IconText type="money-collect" text={'总时长：' + item.countTime.countHours + '小时'} key="list-vertical-message" />,
+              //   <IconText type="money-collect" text={'总费用：' + item.costHour * item.countTime.countHours + '元'} key="list-vertical-message" />,
+              //   // <IconText type="carry-out" text={'当前状态：' + item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
+              // ]}
+            >
+              <List.Item.Meta
+                title={<a href={item.href}>{'订单编号：' + item._id}</a>}
+              // description={'员工简介：' + item.introduction}
+              />
+           开始时间：{item.startTime}
+            &emsp; |&emsp;
+            结束时间：{item.endTime}
+            &emsp; |&emsp;
+            总时间：{item.countTime.countHours + ' hours'}
+              <br />
+              <br />
+            服务地址：{item.address}
+            &emsp; |&emsp;
+            下单时间：{moment(item.firstTime).format('YYYY-MM-DD HH:mm:ss')}
+            &emsp; |&emsp;
+            消费金额：{item.amount}
+              <br />
+              <br />
+            消费者电话：{item.phone.prefix + '+' + item.phone.phone}
+            </List.Item>
+          </List>
+
+
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
 
+          <Form.Item label="支付方式：" style={{marginTop:20}} hasFeedback>
+              {getFieldDecorator('paymentMethod', {
+                initialValue: 'balance'
+              })(<Select
+                style={{ width: 150 }}
+                // onChange={(value) => { changeSearchType(value) }}
+              >
+                <Option value='balance'>零钱</Option>
+                <Option value='CCBDebit Card'>建设银行卡</Option>
+              </Select>)}
 
-            <Form.Item label="Account" hasFeedback>
-              {getFieldDecorator('account', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your account!',
-                  }
-                ],
-              })(<Input />)}
             </Form.Item>
 
-            <Form.Item label="Password" hasFeedback>
+            <Form.Item label="支付密码：" style={{marginTop:20}} hasFeedback>
               {getFieldDecorator('password', {
                 rules: [
                   {
