@@ -38,6 +38,10 @@ const IconText = ({ type, text }) => (
 
 class AppointmentSure extends Component {
 
+  // finish = () => {    
+  //   this.props.history.push('/appointment-pay', { item: result.data })
+  // }
+
   orderSub = () => {
     this.form.validateFields(async (err, value) => {
       if (!err) {

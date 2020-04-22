@@ -14,9 +14,8 @@ import {
   Select,
   Row,
   Col,
-  Checkbox,
   Button,
-  AutoComplete,
+  Rate,
   Steps,
   message,
   Radio,
@@ -28,6 +27,8 @@ import { reqAddOrder } from './api'
 
 const { Option } = Select;
 const { Step } = Steps;
+const { TextArea } = Input;
+const desc = ['1分', '2分', '3分', '4分', '5分'];
 
 const IconText = ({ type, text }) => (
   <span>
@@ -38,7 +39,13 @@ const IconText = ({ type, text }) => (
 
 class AppointmentPay extends Component {
 
-
+  state = {
+    radioValue: 1,
+    star: 0,
+    selectOption: '',
+    inductionTime: ''
+  };
+  
   handleCancel = () => {
     // console.log('handleCancel')
     message.warning('请在三天内完成支付！')
@@ -51,7 +58,6 @@ class AppointmentPay extends Component {
       if (!err) {
         console.log(values)
         this.props.history.push('/appointment-done')
-        // this.props.history.push('/appointment-finish', { item: this.props.location.state.item })
       }
     }
     )
@@ -79,6 +85,10 @@ class AppointmentPay extends Component {
     callback();
   };
 
+  // 评分
+  handleRateChange = value => {
+    this.setState({ star: value });
+  };
 
   render() {
 
@@ -87,6 +97,8 @@ class AppointmentPay extends Component {
 
     // dispatch to props
     const { } = this.props;
+
+    const { star } = this.state;
 
     // state to props
     const { currentUser } = this.props;
@@ -127,7 +139,7 @@ class AppointmentPay extends Component {
     return (
       <div style={{ background: '#ECECEC', padding: '30px' }} >
         <Card
-          title="确认支付"
+          title="评价"
           bordered={true}
           style={{ maxWidth: 800, margin: '0 auto' }}
           // hoverable={true}
@@ -136,9 +148,9 @@ class AppointmentPay extends Component {
           <Steps>
             <Step status="finish" title="核对订单" icon={<Icon type="solution" />} />
             {/* <Step status="process" title="Login" icon={<Icon type="solution" />} /> */}
-            <Step status="process" title="支付费用" icon={<Icon type="loading" />} />
-            <Step status="wait" title="完成订单" icon={<Icon type="lock" />} />
-            <Step status="wait" title="评价" icon={<Icon type="smile-o" />} />
+            <Step status="finish" title="支付费用" icon={<Icon type="money-collect" />} />
+            <Step status="finish" title="完成订单" icon={<Icon type="lock" />} />
+            <Step status="process" title="评价" icon={<Icon type="loading" />} />
           </Steps>
 
           <List
@@ -176,37 +188,36 @@ class AppointmentPay extends Component {
             消费金额：{item.amount}
               <br />
               <br />
-            消费者电话：{item.phone.prefix + '+' + item.phone.phone}
+              服务公司：案例与
+            &emsp; |&emsp;
+            服务类型：终点工
+            &emsp; |&emsp;
+            服务人员：海子
+              <br />
+              <br />
+            订单状态：<Button type='danger'>已完成</Button>
             </List.Item>
           </List>
 
 
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
 
-          <Form.Item label="支付方式：" style={{marginTop:20}} hasFeedback>
-              {getFieldDecorator('paymentMethod', {
-                initialValue: 'balance'
-              })(<Select
-                style={{ width: 150 }}
-                // onChange={(value) => { changeSearchType(value) }}
-              >
-                <Option value='balance'>零钱</Option>
-                <Option value='CCBDebit Card'>建设银行卡</Option>
-              </Select>)}
+          <Form.Item label='订单评分:'>            
+          {getFieldDecorator('star', {
+              // initialValue: star,
+              // rules: [{ required: true, message: '必须输入星级!' }],
+            })(
+            <span>
+              <Rate tooltips={desc} onChange={this.handleRateChange} value={star} />
+              {star ? <span className="ant-rate-text">{desc[star - 1]}</span> : ''}
+            </span>)}
+          </Form.Item>
 
-            </Form.Item>
-
-            <Form.Item label="支付密码：" style={{marginTop:20}} hasFeedback>
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input your password!',
-                  },
-                ],
-              })(<Input.Password />)}
-
-            </Form.Item>
+          <Form.Item label='服务评论:'>
+            {getFieldDecorator('comments', {
+              // initialValue: item.address,
+            })(<TextArea placeholder='服务评论' autosize={{ minRows: 2, maxRows: 6 }} />)}
+          </Form.Item>
 
 
             <Form.Item {...buttonFormItemLayout}>

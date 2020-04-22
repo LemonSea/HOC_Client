@@ -156,6 +156,7 @@ class BrandDetail extends Component {
               // <IconText type="like-o" text="156" key="list-vertical-like-o" />,
               <IconText type="money-collect" text={'费用：' +  item.costHour + '元/小时'} key="list-vertical-message" />,
               <IconText type="carry-out" text={'当前状态：' + item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
+              <Button type='default' icon='star'>收藏</Button>,
             ]}
             extra={
               <img

@@ -29,6 +29,11 @@ import StaffDetail from '../staffDetail/index';
 import AppointmentSure from '../staffDetail/appointment-sure';
 import AppointmentPay from '../staffDetail/appointment-pay';
 import AppointmentDone from '../staffDetail/appointment-done';
+import AppointmentFinish from '../staffDetail/appointment-finish';
+// 地址簿
+import AddressBook from '../address/index';
+// 收藏夹
+import Favorites from '../favorites/index';
 // 订单
 import OrderList from '../order/order-list';
 // 个人信息
@@ -73,8 +78,12 @@ class Main extends Component {
           <Route path='/appointment-sure' component={AppointmentSure}></Route>
           <Route path='/appointment-pay' component={AppointmentPay}></Route>
           <Route path='/appointment-done' component={AppointmentDone}></Route>
+          <Route path='/appointment-finish' component={AppointmentFinish}></Route>
 
           <Route path='/order-list' component={OrderList}></Route>
+          
+          <Route path='/address-book' component={AddressBook}></Route>
+          <Route path='/favorites' component={Favorites}></Route>
 
           <Route path='/personal' component={Personal}></Route>
           <Route path='/account-validate' component={accountValidate}></Route>

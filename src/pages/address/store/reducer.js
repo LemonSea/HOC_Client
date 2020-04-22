@@ -5,10 +5,13 @@ import { fromJS } from 'immutable';
 
 // 这里用到fromJS把JS数据结构转化成immutable数据结构
 const defaultState = fromJS({
+    list:[]
 });
 
 export default (state = defaultState, action) => {
     switch (action.type) {
+        case actionTypes.GET_LIST:
+            return state.set('list', action.data);
         default:
             return state;
     }

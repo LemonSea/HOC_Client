@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { List, Typography,DatePicker } from 'antd';
+import data from '../../../utils/city.json'
 
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
-
-
-
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-];
 
 export default class BrandList extends Component {
 
@@ -30,9 +21,9 @@ export default class BrandList extends Component {
         >
           <List.Item>
             <Typography.Title level={4}>地址：</Typography.Title>
-            {place.map((item, index) => {
+            {data.map((item, index) => {
               return (
-                <Typography.Text style={{marginLeft:20, cursor:'pointer'}}>{item}</Typography.Text>
+                <Typography.Text style={{marginLeft:20, cursor:'pointer'}}>{item.name}</Typography.Text>
               )
             })}
           </List.Item>

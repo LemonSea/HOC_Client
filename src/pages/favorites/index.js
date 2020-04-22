@@ -31,9 +31,9 @@ class Staff extends Component {
     return (
       <div style={{ marginTop: 10 }}>
         <HomeWrapper>
-          <SearchPart />
+          {/* <SearchPart /> */}
 
-          <FilterCondition staffType={staffTypeJS} />
+          {/* <FilterCondition staffType={staffTypeJS} /> */}
 
           <StaffList  history={this.props.history}/>
           {/* <HomeAdvertise>

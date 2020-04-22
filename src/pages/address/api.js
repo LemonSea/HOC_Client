@@ -2,13 +2,27 @@
 // import { postLoginRequest } from '../../../api/request';
 import { axiosAuthInstance } from "../../api/config";
 
+export const reqUserAddressList = (user) => {
+    try {
+        const result = axiosAuthInstance({
+            method: "GET",
+            url: 'userAddress',
+            params: {
+                user
+            }
+        })
+        return result;
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}
 
-export const reqAddRole = (data) => {
+export const reqAddUserAddress = (data) => {
     try {
         const Result = axiosAuthInstance({
             method: "POST",
             headers: { 'Content-type': 'application/json', },
-            url: 'role/admin',
+            url: 'userAddress',
             data: {
                 data
             },
@@ -18,46 +32,51 @@ export const reqAddRole = (data) => {
         console.log('请求出错！', error)
     }
 }
-export const reqUpdateRole = (_id, data) => {
+
+export const reqEditUserAddress = (_id, data) => {
     try {
-        console.log('reqUpdateRole-data', data)
-        return axiosAuthInstance({
+        const Result = axiosAuthInstance({
             method: "PUT",
             headers: { 'Content-type': 'application/json', },
-            url: 'role/auth',
+            url: 'userAddress',
             data: {
                 _id,
-                menu: data
+                data
             },
         })
+        return Result;
     } catch (error) {
         console.log('请求出错！', error)
     }
 }
-export const reqDeleteRole = (_id) => {
+export const reqDeleteUserAddress = (_id) => {
     try {
-        return axiosAuthInstance({
+        const Result = axiosAuthInstance({
             method: "DELETE",
             headers: { 'Content-type': 'application/json', },
-            url: 'role',
+            url: 'userAddress',
             data: {
                 _id
             },
         })
+        return Result;
     } catch (error) {
         console.log('请求出错！', error)
     }
 }
-export const reqChangeStatus = (_id) => {
+
+export const reqSetDefault = (oldId, newId) => {
     try {
-        return axiosAuthInstance({
-            method: "DELETE",
+        const Result = axiosAuthInstance({
+            method: "PUT",
             headers: { 'Content-type': 'application/json', },
-            url: 'role',
+            url: 'userAddress/setDefault',
             data: {
-                _id
+                oldId,
+                newId
             },
         })
+        return Result;
     } catch (error) {
         console.log('请求出错！', error)
     }

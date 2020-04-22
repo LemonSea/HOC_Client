@@ -99,7 +99,8 @@ const Header = (props) => {
                 {/* <div onClick={() => { console.log('个人中心') }}>个人中心</div> */}
                 <Link to={personalPath}><div>个人信息</div></Link>
                 <Link to={accountValidatePath}><div>密码修改</div></Link>
-                <Link to='/order-list'><div>地址簿</div></Link>
+                <Link to='/address-book'><div>地址簿</div></Link>
+                <Link to='/favorites'><div>收藏夹</div></Link>
                 <Link to='/order-list'><div onClick={() => { console.log('订单查看') }}>订单查看</div></Link>
                 <div onClick={logout}>登出</div>
               </DropDown>
