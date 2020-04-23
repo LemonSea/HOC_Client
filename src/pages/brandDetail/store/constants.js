@@ -1,2 +1,2 @@
-export const GET_LIST = 'admin/staff/GET_LIST';
+export const GET_DETAIL = 'client/company/GET_DETAIL';
 

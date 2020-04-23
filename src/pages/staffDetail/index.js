@@ -157,12 +157,11 @@ class BrandDetail extends PureComponent {
     }
   }
 
+  // 获取当前用户的所有收藏信息
   getFavoritesList = async () => {
     // 获取当前用户的所有收藏信息
     const user = this.props.currentUser.toJS()._id
     const result = await reqAllStaffFavoritesList(user)
-    console.log('result', result)
-    console.log(' this.props.staffDetail.toJS()._id',  this.props.location.state.item._id)
     if (result.status === 0) {
       result.data.forEach(element => {
         if(element.staff === this.props.location.state.item._id) {

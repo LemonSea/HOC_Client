@@ -8,7 +8,11 @@ const defaultState = fromJS({
     staffList: [],  // 员工列表
     staffTotal: 0, // 员工分页总数量
     staffPageNum: 1,
-    staffLoading: true
+    staffLoading: true,
+    companyList: [],  // 公司列表
+    companyTotal: 0, // 公司分页总数量
+    companyPageNum: 1,
+    companyLoading: true
 });
 
 export default (state = defaultState, action) => {
@@ -19,6 +23,13 @@ export default (state = defaultState, action) => {
                 staffTotal: action.total,
                 staffPageNum: action.pageNum,
                 staffLoading: false
+            });
+        case actionTypes.GET_BRAND_LIST:
+            return state.merge({
+                companyList: action.list,
+                companyTotal: action.total,
+                companyPageNum: action.pageNum,
+                companyLoading: false
             });
         default:
             return state;

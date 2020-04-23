@@ -2,13 +2,30 @@
 // import { postLoginRequest } from '../../../api/request';
 import { axiosAuthInstance } from "../../api/config";
 
+// 获取公司详情
+export const reqCompanyDetail = (_id) => {
+    try {
+        const Result = axiosAuthInstance({
+            method: "GET",
+            headers: { 'Content-type': 'application/json', },
+            url: 'company/client',
+            params: {
+                _id
+            },
+        })
+        return Result;
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}
 
-export const reqAddRole = (data) => {
+// 收藏公司
+export const reqAddCompanyFavorites = (data) => {
     try {
         const Result = axiosAuthInstance({
             method: "POST",
             headers: { 'Content-type': 'application/json', },
-            url: 'role/admin',
+            url: 'companyFavorites',
             data: {
                 data
             },
@@ -18,46 +35,18 @@ export const reqAddRole = (data) => {
         console.log('请求出错！', error)
     }
 }
-export const reqUpdateRole = (_id, data) => {
+
+// 获得公司收藏列表（ALL)
+export const reqAllCompanyFavoritesList = (user) => {
     try {
-        console.log('reqUpdateRole-data', data)
-        return axiosAuthInstance({
-            method: "PUT",
-            headers: { 'Content-type': 'application/json', },
-            url: 'role/auth',
-            data: {
-                _id,
-                menu: data
-            },
+        const result = axiosAuthInstance({
+            method: "GET",
+            url: 'companyFavorites/allList',
+            params: {
+                user
+            }
         })
-    } catch (error) {
-        console.log('请求出错！', error)
-    }
-}
-export const reqDeleteRole = (_id) => {
-    try {
-        return axiosAuthInstance({
-            method: "DELETE",
-            headers: { 'Content-type': 'application/json', },
-            url: 'role',
-            data: {
-                _id
-            },
-        })
-    } catch (error) {
-        console.log('请求出错！', error)
-    }
-}
-export const reqChangeStatus = (_id) => {
-    try {
-        return axiosAuthInstance({
-            method: "DELETE",
-            headers: { 'Content-type': 'application/json', },
-            url: 'role',
-            data: {
-                _id
-            },
-        })
+        return result;
     } catch (error) {
         console.log('请求出错！', error)
     }

@@ -10,6 +10,7 @@ import { reducer as homeReducer}  from '../pages/home/store';
 import { reducer as staffReducer}  from '../pages/staff/store';
 import { reducer as staffDetailReducer}  from '../pages/staffDetail/store';
 import { reducer as brandReducer}  from '../pages/brand/store';
+import { reducer as brandDetailReducer}  from '../pages/brandDetail/store';
 import { reducer as orderReducer}  from '../pages/order/store';
 import { reducer as addressReducer}  from '../pages/address/store';
 import { reducer as favoritesReducer}  from '../pages/favorites/store';
@@ -24,6 +25,7 @@ const reducer = combineReducers({
     staffReducer,
     staffDetailReducer,
     brandReducer,
+    brandDetailReducer,
     orderReducer,
     addressReducer,
     favoritesReducer

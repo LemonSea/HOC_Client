@@ -3,6 +3,8 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators';
 import { actionCreators as homeActionCreators } from '../home/store';
+import { reqAddCompanyFavorites, reqAllCompanyFavoritesList } from './api';
+import { reqDeleteBrandFavorites } from '../favorites/api';
 import { PAGE_SIZE, BASE_IMG_URL } from '../../utils/constant';
 import {
   HomeWrapper,
@@ -10,7 +12,7 @@ import {
   HomeSide,
 
 } from './style';
-import { List, Divider, Avatar, Icon, Button, Descriptions, Carousel } from 'antd';
+import { List, Divider, Avatar, Icon, Button, message } from 'antd';
 
 import TabBoxStaff from './common/TabBox-Staff';
 
@@ -42,59 +44,134 @@ const data = [
 
 class BrandDetail extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      isFavorites: false
+    }
+  }
+
+  // 收藏
+  addStaffFavorites = async (company) => {
+    const user = this.props.currentUser.toJS()._id
+    const data = {
+      user,
+      company
+    }
+    const result = await reqAddCompanyFavorites(data)
+    if (result.status === 0) {
+      this.setState({
+        isFavorites: true
+      })
+      message.success('收藏成功!');
+    } else if (result.status === 2) {
+      message.warn(result.data);
+    }
+    else {
+      message.warn('收藏失败!');
+    }
+  }
+
+  
+  // 取消收藏
+  deleteCompanyFavorites = async (company) => {
+    const user = this.props.currentUser.toJS()._id
+    const data = {
+      user,
+      company
+    }
+    const result = await reqDeleteBrandFavorites(data)
+    if (result.status === 0) {
+      this.setState({
+        isFavorites: false
+      })
+      message.success('取消收藏成功!');
+    } else if (result.status === 2) {
+      message.warn(result.data);
+    }
+    else {
+      message.warn('取消收藏失败!');
+    }
+  }
+
+  // 获取当前用户的所有收藏信息
+  getFavoritesList = async () => {
+    // 获取当前用户的所有收藏信息
+    const user = this.props.currentUser.toJS()._id
+    const result = await reqAllCompanyFavoritesList(user)
+    if (result.status === 0) {
+      console.log('getFavoritesList', result)
+      result.data.forEach(element => {
+        if (element.company === this.props.location.state.item._id) {
+          this.setState({
+            isFavorites: true
+          })
+        }
+      })
+    } else {
+      // message.warn('取消收藏失败!');
+      console.error(result)
+    }
+  }
 
   componentDidMount() {
-    this.props.getStaffRecommend()
+    const _id = this.props.location.state.item._id;
+    this.props.getCompanyDetail(_id);
+
+    this.getFavoritesList()
   }
 
   render() {
 
-    const { item } = this.props.location.state
-    console.log(item)
+    // const { item } = this.props.location.state
+    // console.log(item)
 
     const { } = this.props;
     // state to props
-    const { staffRecommendList, list, total, } = this.props;
+    const { staffRecommendList, brandDetail } = this.props;
+    const item = brandDetail ? brandDetail.toJS() : [];
+    console.log('item', item)
+
     const staffRecommendListJS = staffRecommendList ? staffRecommendList.toJS() : [];
-    const listJS = list ? list.toJS() : [];
-    console.log('staffRecommendListJS', staffRecommendListJS)
+
 
     // list 内容
     let listData = [];
     // for (let i = 0; i < 6; i++) {
     //   listData.push(staffRecommendListJS[i])
     // }
-    
+
     return (
       <HomeWrapper style={{ marginTop: 10 }}>
+
         <List
           size="large"
           bordered
           itemLayout="vertical"
           size="large"
-        // footer={
-        //   <div>
-        //     <b>公司介绍:</b> {item.name}
-        //   </div>
-        // }
-        // dataSource={data}
-        // renderItem={item => <List.Item>{item}</List.Item>}
         >
-
           <List.Item
             key={item.title}
-            // actions={[
-            //   <IconText type="star-o" text="156" key="list-vertical-star-o" />,
-            //   <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-            //   <IconText type="message" text="2" key="list-vertical-message" />,
-            // ]}
+            actions={[
+              <span>
+                {
+                  this.state.isFavorites === false ?
+                    <Button type='default' icon='star' onClick={() => this.addStaffFavorites(item._id)}>收藏</Button>
+                    :
+                    <Button type='default' onClick={() => this.deleteCompanyFavorites(item._id)}><span className="iconfont" style={{ color: '#FFC347' }}>&#xe8b9;</span>&ensp;取消收藏</Button>
+                }
+              </span>
+
+            ]}
             extra={
-              <img
-                width={150}
-                height={150}
-                alt="img"
-                src={BASE_IMG_URL + item.imgs[0]}
-              />
+              item.imgs ?
+                <img
+                  width={150}
+                  height={150}
+                  alt="img"
+                  src={BASE_IMG_URL + item.imgs[0]}
+                />
+                : ''
             }
           >
             <List.Item.Meta
@@ -107,16 +184,15 @@ class BrandDetail extends Component {
             公司邮箱：{item.email}
             <br />
             <br />
-            客服电话-1：{item.phone1.phone1 + '+' + item.phone1.prefix1}
+            客服电话-1 ：{item.phone1 ? item.phone1.phone1 + '+' + item.phone1.prefix1 : ''}
             &emsp; |&emsp;
-            客服电话-2：{item.phone2.phone2 + '+' + item.phone2.prefix2}
+            客服电话-2：{item.phone2 ? item.phone2.phone2 + '+' + item.phone2.prefix2 : ''}
             &emsp; |&emsp;
-            客服电话-3：{item.phone3.phone3 + '+' + item.phone3.prefix3}
+            客服电话-3：{item.phone3 ? item.phone3.phone3 + '+' + item.phone3.prefix3 : ''}
           </List.Item>
 
-
+          {/* 评论 */}
           <List.Item>
-
             <Divider style={{ fontSize: 15 }} orientation="left">雇主评价</Divider>
             <List
               itemLayout="horizontal"
@@ -138,44 +214,20 @@ class BrandDetail extends Component {
             {/* <TabBoxStaff staffRecommendList={staffRecommendListJS} /> */}
           </List.Item>
 
+          {/* 好评员工 */}
           <List.Item>
             <Divider style={{ fontSize: 15 }} orientation="left">好评员工：</Divider>
             <List
               itemLayout="vertical"
               size="large"
-              // pagination={{
-              //   current: this.props.pageNum,
-              //   // onChange: page => {
-              //   //   console.log(page);
-              //   // },
-              //   total,
-              //   showQuickJumper: true,
-              //   onChange: (pageNum) => { getList(pageNum, this.props.currentUser.toJS()) },
-              //   pageSize: PAGE_SIZE,
-              // }}
               dataSource={listData}
               footer={
                 <div>
-                  {/* <b>ant design</b> footer part */}
                 </div>
               }
               renderItem={staffItem => (
                 <List.Item
                   key={staffItem.title}
-                // actions={[
-                //   <IconText type="star-o" text={'星级：' + item.star} key="list-vertical-star-o" />,
-                //   <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-                //   <IconText type="message" text="2" key="list-vertical-message" />,
-                //   <IconText type="carry-out" text={item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
-                // ]}
-                // extra={
-                //   <img
-                //     width={150}
-                //     height={150}
-                //     alt="img"
-                //     src={BASE_IMG_URL + item.imgs[0]}
-                //   />
-                // }
                 >
                   <List.Item.Meta
                     avatar={<Avatar src={staffItem.avatar} />}
@@ -207,13 +259,18 @@ class BrandDetail extends Component {
               )}
             />
           </List.Item>
+
         </List>
+
       </HomeWrapper >
     )
   }
 }
 const mapStateToProps = (state) => ({
   staffRecommendList: state.getIn(['homeReducer', 'staffRecommend', 'list']),
+  currentUser: state.getIn(['loginReducer', 'currentUser']),
+
+  brandDetail: state.getIn(['brandDetailReducer', 'brandDetail']),
 
   list: state.getIn(['staffReducer', 'list']),
   // page total
@@ -226,6 +283,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getStaffRecommend(staffType) {
     dispatch(homeActionCreators.getStaffRecommend());
+  },
+  getCompanyDetail(_id) {
+    dispatch(actionCreators.getCompanyDetail(_id));
   },
 })
 

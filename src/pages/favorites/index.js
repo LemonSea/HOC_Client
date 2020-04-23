@@ -17,6 +17,7 @@ import LinkButton from '../../components/link-button';
 // } from './style';
 
 import StaffFavoritesList from './common/StaffFavoritesList';
+import BrandFavoritesList from './common/BrandFavoritesList';
 
 const { TabPane } = Tabs;
 
@@ -78,7 +79,7 @@ class Staff extends Component {
               }
               key="company"
             >
-              公司收藏夹
+              <BrandFavoritesList history={this.props.history} />
             </TabPane>
           </Tabs>
         </Card>
