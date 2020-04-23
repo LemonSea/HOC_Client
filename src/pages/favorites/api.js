@@ -1,14 +1,16 @@
 // 导入网络请求
 import { axiosAuthInstance } from "../../api/config";
 
-// 获取推荐公司
-export const reqFirmRecommend = () => {
+// 获得员工收藏列表
+export const reqStaffFavoritesList = (user, pageNum, pageSize) => {
     try {
         const result = axiosAuthInstance({
             method: "GET",
-            url: 'company/recommend',
+            url: 'staffFavorites',
             params: {
-                limit: 8
+                user,
+                pageNum,
+                pageSize
             }
         })
         return result;
@@ -16,17 +18,18 @@ export const reqFirmRecommend = () => {
         console.log('请求出错！', error)
     }
 }
-// 获取推荐员工
-export const reqStaffRecommend = () => {
+
+export const reqDeleteStaffFavorites = (data) => {
     try {
-        const result = axiosAuthInstance({
-            method: "GET",
-            url: 'staff/recommend',
-            params: {
-                limit: 8
-            }
+        const Result = axiosAuthInstance({
+            method: "DELETE",
+            headers: { 'Content-type': 'application/json', },
+            url: 'staffFavorites',
+            data: {
+                data
+            },
         })
-        return result;
+        return Result;
     } catch (error) {
         console.log('请求出错！', error)
     }

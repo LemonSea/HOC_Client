@@ -8,9 +8,11 @@ import { reducer as mainReducer}  from '../pages/main/store';
 import { reducer as regFirmReducer}  from '../pages/regFirm/store';
 import { reducer as homeReducer}  from '../pages/home/store';
 import { reducer as staffReducer}  from '../pages/staff/store';
+import { reducer as staffDetailReducer}  from '../pages/staffDetail/store';
 import { reducer as brandReducer}  from '../pages/brand/store';
 import { reducer as orderReducer}  from '../pages/order/store';
 import { reducer as addressReducer}  from '../pages/address/store';
+import { reducer as favoritesReducer}  from '../pages/favorites/store';
 
 // 合并 reducer 函数为一个 obj
 const reducer = combineReducers({
@@ -20,9 +22,11 @@ const reducer = combineReducers({
     regFirmReducer,
     homeReducer,
     staffReducer,
+    staffDetailReducer,
     brandReducer,
     orderReducer,
-    addressReducer
+    addressReducer,
+    favoritesReducer
 })
 
 export default reducer

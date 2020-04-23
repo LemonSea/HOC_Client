@@ -5,24 +5,21 @@ import { fromJS } from 'immutable';
 
 // 这里用到fromJS把JS数据结构转化成immutable数据结构
 const defaultState = fromJS({
-    list: [],  // 员工列表
-    total: 0, // 分页总数量
-    pageNum: 1,
-    loading: true,
-    typeItem: '',  // 员工类型
+    staffList: [],  // 员工列表
+    staffTotal: 0, // 员工分页总数量
+    staffPageNum: 1,
+    staffLoading: true
 });
 
 export default (state = defaultState, action) => {
     switch (action.type) {
         case actionTypes.GET_LIST:
             return state.merge({
-                list: action.list,
-                total: action.total,
-                pageNum: action.pageNum,
-                loading: false
+                staffList: action.list,
+                staffTotal: action.total,
+                staffPageNum: action.pageNum,
+                staffLoading: false
             });
-        case actionTypes.CHANGE_TYPE:
-            return state.set('typeItem', action.staffType);
         default:
             return state;
     }

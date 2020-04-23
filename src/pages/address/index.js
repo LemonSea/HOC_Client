@@ -109,18 +109,6 @@ class Temp extends Component {
     })
   }
 
-  // 删除地址
-  // deleteAddress= async (_id) => {
-  //   const user = this.props.currentUser.toJS()._id
-  //   const result = await reqDeleteUserAddress(_id)
-  //   if (result.status === 0) {
-  //     message.success('删除地址成功!');
-  //     this.props.getList(user)
-  //   } else {
-  //     message.warn('删除地址失败!');
-  //   }
-  // }
-
   deleteAddress = (_id) => {
     Modal.confirm({
       title: `确定删除吗?`,

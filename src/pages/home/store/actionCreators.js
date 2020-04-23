@@ -34,7 +34,7 @@ export const getStaffRecommend = () => {
   return async (dispatch) => {
     const result = await reqStaffRecommend()
     if (result.status === 0) {  
-      console.log(result)    
+      // console.log(result)    
       dispatch(redStaffRecommend(result.data))
     } else {
       console.error(result);      
