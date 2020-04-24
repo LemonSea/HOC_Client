@@ -8,7 +8,7 @@ export const reqChangeOrder = (_id, status) => {
         return axiosAuthInstance({
             method: "PUT",
             headers: { 'Content-type': 'application/json', },
-            url: 'order/admin/orderStatus',
+            url: 'order/client/orderStatus',
             data: {
                 _id,
                 status

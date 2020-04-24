@@ -36,6 +36,7 @@ import AddressBook from '../address/index';
 import Favorites from '../favorites/index';
 // 订单
 import OrderList from '../order/order-list';
+import OrderDetail from '../order/order-detail';
 // 个人信息
 import Personal from '../personal/index';
 // 修改密码
@@ -81,6 +82,7 @@ class Main extends Component {
           <Route path='/appointment-finish' component={AppointmentFinish}></Route>
 
           <Route path='/order-list' component={OrderList}></Route>
+          <Route path='/order-detail' component={OrderDetail}></Route>
           
           <Route path='/address-book' component={AddressBook}></Route>
           <Route path='/favorites' component={Favorites}></Route>

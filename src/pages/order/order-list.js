@@ -37,7 +37,9 @@ class order extends PureComponent {
       item: {},  // 当前选中项
       isShowAdd: false,  // 是否显示添加界面
       isShowAuth: false,  // 是否显示设置权限界面
+      isCancel: false,
       isContinuePay: false,
+      isComments: false,
       showStatus: 0
     }
   }
@@ -117,13 +119,31 @@ class order extends PureComponent {
   onRow = (item) => {
     return {
       onClick: event => {  // 点击行
-        if(item.status === 0) {
+        console.log(item.status)
+        if (item.status === 0) {
           this.setState({
-            isContinuePay: true
+            isContinuePay: true,
+            isComments: false,
+            isCancel: true,
+          })
+        } else if (item.status === 2) {
+          this.setState({
+            isContinuePay: false,
+            isComments: true,
+            isCancel: false
+          })
+        } else if (item.status < 2) {
+          this.setState({
+            isContinuePay: false,
+            isComments: false,
+            isCancel: true
           })
         } else {
+          console.log(this.state)
           this.setState({
-            isContinuePay: false
+            isContinuePay: false,
+            isComments: false,
+            isCancel: false
           })
         }
         this.setState({
@@ -142,6 +162,31 @@ class order extends PureComponent {
     this.form.resetFields();
   };
 
+  /**
+   * 取消订单
+   */
+  changeStatus = (_id, status) => {
+    Modal.confirm({
+      title: `确定取消该订单?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: async () => {
+        const result = await reqChangeOrder(_id, status)
+        console.log('result', result)
+        if (result.status === 0) {
+          message.success('取消订单成功!');
+          // console.log(result)
+          this.props.getList(1, this.props.currentUser.toJS())
+        } else {
+          message.warn('发生了错误!');
+        }
+      },
+      // onCancel() {
+      //   console.log('Cancel');
+      // },
+    });
+  }
 
   componentWillMount() {
     // list 标题
@@ -162,7 +207,7 @@ class order extends PureComponent {
     const { list, loading, total, roles, pageNum, currentUser } = this.props;
     const listJS = list ? list.toJS() : [];
     const currentUserJS = currentUser ? currentUser.toJS() : [];
-    console.log('currentUserJS', currentUserJS)
+    // console.log('currentUserJS', currentUserJS)
 
     const { item, showStatus } = this.state
 
@@ -177,50 +222,50 @@ class order extends PureComponent {
             type='primary'
             disabled={!this.state.isContinuePay}
             // onClick={() => this.setState({ showStatus: 1 })}
-            onClick={()=>{
+            onClick={() => {
               // this.props.history.push('/staffDetail', { item: item })
-              this.props.history.push('/appointment-pay', { item: item })}
+              this.props.history.push('/appointment-pay', { item: item })
+            }
             }
           >
             继续支付
         </Button>
         </span>
-        {/* <span>
+        <span>
           <Button
-            disabled={!item._id}
-            style={{ marginLeft: 30 }}
-            type={item.status === 0 ? 'primary' : 'danger'}
-            onClick={() => this.changeStatus(item._id, item.status === 0 ? 1 : 0, this.props.pageNum)}
+            icon="edit"
+            style={{ marginLeft: 20 }}
+            type='primary'
+            disabled={!this.state.isComments}
+            // onClick={() => this.setState({ showStatus: 1 })}
+            onClick={() => {
+              // this.props.history.push('/staffDetail', { item: item })
+              this.props.history.push('/appointment-finish', { item: item })
+            }
+            }
           >
-            {item.status === 0 ? '启用该账号' : '冻结该账号'}</Button>
-        </span> */}
+            评论
+        </Button>
+        </span>
       </div>
     )
 
     // 右侧
     const extra = (
-      // <Button
-      //   type='primary'
-      //   disabled={!item._id}
-      //   onClick={() => { this.delete(item._id, pageNum) }}
-      // >
-      //   删除
-      // </Button>
       <div>
-        {/* <Button
-      type='default'
-      disabled={!item._id}
-      // onClick={() => { this.delete(item._id, pageNum) }}
-      onClick={() => this.props.history.push('/company/officerDetail', { item: item.Officer })}
-    >
-      查看公司负责人详情
-    </Button> */}
-
+        <Button
+          style={{ marginLeft: 20 }}
+          type='primary'
+          disabled={!this.state.isCancel}
+          // onClick={() => { this.delete(item._id, pageNum) }}
+          onClick={() => this.changeStatus(item._id, -1)}
+        >
+          取消订单
+    </Button>
         <Button
           style={{ marginLeft: 20 }}
           type='primary'
           disabled={!item._id}
-          // onClick={() => { this.delete(item._id, pageNum) }}
           onClick={() => this.props.history.push('/order-detail', { item: item })}
         >
           查看订单详情
@@ -230,76 +275,38 @@ class order extends PureComponent {
     )
 
     return (
-      
+
       <HomeWrapper>
-      <Card title={title} extra={extra}>
-        {/* <Card title={title}> */}
-        <Table
-          bordered={true}
-          rowKey='_id'
-          loading={loading}
-          dataSource={dataSource}
-          columns={this.columns}
-          pagination={{
-            total,
-            defaultPageSize: PAGE_SIZE,
-            showQuickJumper: true, onChange: (pageNum) => { getList(pageNum,  this.props.currentUser.toJS()) }
-          }}
-          rowSelection={{
-            type: 'radio',
-            selectedRowKeys: [item._id],
-            onSelect: (item) => {
-              this.setState({
-                item
-              })
-            }
-          }}
-          onRow={this.onRow}
-        ></Table>
+        <Card title={title} extra={extra}>
+          {/* <Card title={title}> */}
+          <Table
+            bordered={true}
+            rowKey='_id'
+            loading={loading}
+            dataSource={dataSource}
+            columns={this.columns}
+            pagination={{
+              total,
+              defaultPageSize: PAGE_SIZE,
+              showQuickJumper: true, onChange: (pageNum) => { getList(pageNum, this.props.currentUser.toJS()) }
+            }}
+            rowSelection={{
+              type: 'radio',
+              selectedRowKeys: [item._id],
+              onSelect: (item) => {
+                this.setState({
+                  item
+                })
+              }
+            }}
+            onRow={this.onRow}
+          ></Table>
+        </Card>
 
-        {/* <Modal
-          title="查看权限"
-          visible={showStatus === 2}
-          onOk={() => {
-            this.setState({ showStatus: 0 })
-            // this.updateRole(creatorJS, this.form);
-            // getList()
-          }}
-          onCancel={() => {
-            this.setState({ showStatus: 0 })
-            // this.form.resetFields();
-          }}
-        >
-          <AuthForm
-            item={item.role}
-            list={this.props.menuList}
-            // ref={this.auth}
-          // setForm={(form) => { this.form = form }}
-          />
-        </Modal> */}
-
-        {/* <Modal
-          title="管理角色"
-          visible={showStatus === 1}
-          onOk={() => {
-            this.changeRole(this.props.pageNum)
-          }}
-          onCancel={this.handleCancel}
-        >
-          <EditForm
-            item={item}
-            roles={rolesJS}
-            setForm={(form) => { this.form = form }}
-          />
-        </Modal> */}
-
-      </Card>
-      
       </HomeWrapper>
     )
   }
 }
-
 
 const mapStateToProps = (state) => ({
   currentUser: state.getIn(['loginReducer', 'currentUser']),

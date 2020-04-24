@@ -51,8 +51,8 @@ class AppointmentPay extends Component {
         console.log('result', result)
         if (result.status === 0) {
           message.success('支付成功!');
-          console.log(result)
-          // this.props.getList(pageNum,'','', this.props.currentUser.toJS())
+          // console.log(result)
+          this.props.history.push('/appointment-done')
         } else {
           message.warn('发生了错误!');
         }
@@ -78,8 +78,7 @@ class AppointmentPay extends Component {
       if (!err) {
         const _id = this.props.location.state.item._id;
         this.changeStatus(_id,1)
-        this.props.history.push('/home')
-        // this.props.history.push('/appointment-done')
+        // this.props.history.push('/home')
         // this.props.history.push('/appointment-finish', { item: this.props.location.state.item })
       }
     }

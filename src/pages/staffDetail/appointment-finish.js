@@ -23,7 +23,7 @@ import {
 } from 'antd';
 import LinkButton from '../../components/link-button';
 import AppointmentForm from './appointment-form';
-import { reqAddOrder } from './api'
+import { reqAddOrderComments } from './api'
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -45,19 +45,40 @@ class AppointmentPay extends Component {
     selectOption: '',
     inductionTime: ''
   };
-  
+
   handleCancel = () => {
     // console.log('handleCancel')
-    message.warning('请在三天内完成支付！')
-    this.props.history.push('/home')
+    // message.warning('请在三天内完成支付！')
+    // this.props.history.push('/home')
+    this.props.history.goBack()
   }
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll(async (err, values) => {
-      if (!err) {
-        console.log(values)
-        this.props.history.push('/appointment-done')
+      if (this.state.star != 0) {
+        let text = '服务不错，态度认真，好评！';
+        let formData = {
+          satisfaction: this.state.star === 0 ? 5 : this.state.star,
+          comments: values.comments ? values.comments : text,
+          user:  this.props.currentUser.toJS()._id,
+          order: this.props.location.state.item._id,
+          staff: this.props.location.state.item.employee._id,
+          company: this.props.location.state.item.company._id,
+
+        }
+        const result = await reqAddOrderComments(formData)
+        if (result.status === 0) {
+          console.log(result.data)
+          message.success('订单评论成功!');
+          this.props.history.push('/home')
+          // this.props.history.push('/appointment-pay', { item: result.data })
+          // console.log('formData',formData)
+        } else {
+          message.warn('出错啦!');
+        }
+      } else {
+        message.info('请先打分！')
       }
     }
     )
@@ -90,10 +111,15 @@ class AppointmentPay extends Component {
     this.setState({ star: value });
   };
 
+  componentDidMount() {
+    const _id = this.props.location.state.item._id;
+    this.props.getOrderDetail(_id);
+  }
+
   render() {
 
-    const { item } = this.props.location.state
-    console.log('AppointmentPay', item)
+    // const { item } = this.props.location.state
+    // console.log('AppointmentPay', item)
 
     // dispatch to props
     const { } = this.props;
@@ -101,8 +127,9 @@ class AppointmentPay extends Component {
     const { star } = this.state;
 
     // state to props
-    const { currentUser } = this.props;
+    const { currentUser, orderDetail } = this.props;
     const currentUserJS = currentUser ? currentUser.toJS() : [];
+    const item = orderDetail ? orderDetail.toJS() : [];
 
     const { getFieldDecorator } = this.props.form;
 
@@ -162,37 +189,37 @@ class AppointmentPay extends Component {
 
             <List.Item
               key={item.title}
-              // actions={[
-              //   <IconText type="star-o" text={'星级：' + item.star} key="list-vertical-star-o" />,
-              //   // <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-              //   <IconText type="money-collect" text={'总时长：' + item.countTime.countHours + '小时'} key="list-vertical-message" />,
-              //   <IconText type="money-collect" text={'总费用：' + item.costHour * item.countTime.countHours + '元'} key="list-vertical-message" />,
-              //   // <IconText type="carry-out" text={'当前状态：' + item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
-              // ]}
+            // actions={[
+            //   <IconText type="star-o" text={'星级：' + item.star} key="list-vertical-star-o" />,
+            //   // <IconText type="like-o" text="156" key="list-vertical-like-o" />,
+            //   <IconText type="money-collect" text={'总时长：' + item.countTime.countHours + '小时'} key="list-vertical-message" />,
+            //   <IconText type="money-collect" text={'总费用：' + item.costHour * item.countTime.countHours + '元'} key="list-vertical-message" />,
+            //   // <IconText type="carry-out" text={'当前状态：' + item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
+            // ]}
             >
               <List.Item.Meta
                 title={<a href={item.href}>{'订单编号：' + item._id}</a>}
               // description={'员工简介：' + item.introduction}
               />
-           开始时间：{item.startTime}
+              开始时间：{moment(item.startTime).format('YYYY-MM-DD HH:mm:ss')}
+               &emsp; |&emsp;
+               结束时间：{moment(item.endTime).format('YYYY-MM-DD HH:mm:ss')}
             &emsp; |&emsp;
-            结束时间：{item.endTime}
-            &emsp; |&emsp;
-            总时间：{item.countTime.countHours + ' hours'}
+            总时间：{item.countTime ? item.countTime.countHours + ' hours' : ''}
               <br />
               <br />
-            服务地址：{item.address}
+              服务地址：{item.serviceAddress ? item.serviceAddress.areaStr + item.serviceAddress.detailAddress : ''}
             &emsp; |&emsp;
             下单时间：{moment(item.firstTime).format('YYYY-MM-DD HH:mm:ss')}
             &emsp; |&emsp;
-            消费金额：{item.amount}
+            消费金额：{item.amount}&ensp;元
               <br />
               <br />
-              服务公司：案例与
+              服务公司：{item.company ? item.company.name : ''}
+              {/* &emsp; |&emsp;
+            服务类型：终点工 */}
             &emsp; |&emsp;
-            服务类型：终点工
-            &emsp; |&emsp;
-            服务人员：海子
+            服务人员：{item.employee ? item.employee.name : ''}
               <br />
               <br />
             订单状态：<Button type='danger'>已完成</Button>
@@ -202,22 +229,22 @@ class AppointmentPay extends Component {
 
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
 
-          <Form.Item label='订单评分:'>            
-          {getFieldDecorator('star', {
-              // initialValue: star,
-              // rules: [{ required: true, message: '必须输入星级!' }],
-            })(
-            <span>
-              <Rate tooltips={desc} onChange={this.handleRateChange} value={star} />
-              {star ? <span className="ant-rate-text">{desc[star - 1]}</span> : ''}
-            </span>)}
-          </Form.Item>
+            <Form.Item label='订单评分:'>
+              {getFieldDecorator('star', {
+                initialValue: star,
+                // rules: [{ required: true, message: '必须输入星级!' }],
+              })(
+                <span>
+                  <Rate tooltips={desc} onChange={this.handleRateChange} value={star} />
+                  {star ? <span className="ant-rate-text">{desc[star - 1]}</span> : ''}
+                </span>)}
+            </Form.Item>
 
-          <Form.Item label='服务评论:'>
-            {getFieldDecorator('comments', {
-              // initialValue: item.address,
-            })(<TextArea placeholder='服务评论' autosize={{ minRows: 2, maxRows: 6 }} />)}
-          </Form.Item>
+            <Form.Item label='服务评论:'>
+              {getFieldDecorator('comments', {
+                // initialValue: item.address,
+              })(<TextArea placeholder='服务评论' autosize={{ minRows: 2, maxRows: 6 }} />)}
+            </Form.Item>
 
 
             <Form.Item {...buttonFormItemLayout}>
@@ -229,9 +256,7 @@ class AppointmentPay extends Component {
               </Button>
             </Form.Item>
           </Form>
-
-
-
+          
         </Card>
 
       </div>
@@ -242,12 +267,16 @@ class AppointmentPay extends Component {
 
 const mapStateToProps = (state) => ({
   currentUser: state.getIn(['loginReducer', 'currentUser']),
+  orderDetail: state.getIn(['staffDetailReducer', 'orderDetail']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getOfficer(data) {
     dispatch(actionCreators.getOfficer(data));
-  }
+  },
+  getOrderDetail(_id) {
+    dispatch(actionCreators.getOrderDetail(_id));
+  },
 })
 
 const WrappedRegistrationForm = Form.create({ name: 'appointment-pay' })(AppointmentPay);

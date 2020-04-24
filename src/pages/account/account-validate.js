@@ -7,7 +7,8 @@ import {
   Form,
   Input,
   Button,
-  message
+  message,
+  Icon
 } from 'antd';
 import LinkButton from '../../components/link-button';
 import { actionCreators as loginActionCreators } from '../login/store';
@@ -113,11 +114,23 @@ class accountValidate extends Component {
       },
     };
 
+    const title = (
+      <span>
+        <LinkButton>
+          <Icon type='arrow-left' style={{ fontSize: 20 }} onClick={() => {
+            // this.props.history.push('/home')
+            this.props.history.goBack()
+          }} />
+        </LinkButton>
+        <span>密码修改</span>
+        {/* <span>{isUpdate ? '修改员工信息' : '添加员工'}</span> */}
+      </span>
+    )
 
     return (
       <div style={{ background: '#ECECEC', padding: '30px' }} >
         <Card
-          title="修改密码"
+          title={title}
           bordered={true}
           style={{ maxWidth: 800, margin: '0 auto' }}
           // hoverable={true}

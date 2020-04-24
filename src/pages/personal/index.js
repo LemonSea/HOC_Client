@@ -133,7 +133,10 @@ class Personal extends Component {
     const title = (
       <span>
         <LinkButton>
-          <Icon type='arrow-left' style={{ fontSize: 20 }} onClick={() => this.props.history.goBack()} />
+          <Icon type='arrow-left' style={{ fontSize: 20 }} onClick={() => {
+            // this.props.history.push('/home')
+            this.props.history.goBack()
+          }} />
         </LinkButton>
         <span>个人资料</span>
         {/* <span>{isUpdate ? '修改员工信息' : '添加员工'}</span> */}

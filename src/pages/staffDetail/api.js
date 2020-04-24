@@ -86,6 +86,7 @@ export const reqOrderDetail = (_id) => {
     }
 }
 
+// 改变订单状态
 export const reqChangeOrder = (_id, status) => {
     try {
         console.log('reqFinishOrder-status', status)
@@ -98,6 +99,24 @@ export const reqChangeOrder = (_id, status) => {
                 status
             },
         })
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}
+
+
+// 订单打分/评论
+export const reqAddOrderComments = (data) => {
+    try {
+        const Result = axiosAuthInstance({
+            method: "POST",
+            headers: { 'Content-type': 'application/json', },
+            url: 'orderComments',
+            data: {
+                data
+            },
+        })
+        return Result;
     } catch (error) {
         console.log('请求出错！', error)
     }
