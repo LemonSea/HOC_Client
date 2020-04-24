@@ -37,6 +37,7 @@ class order extends PureComponent {
       item: {},  // 当前选中项
       isShowAdd: false,  // 是否显示添加界面
       isShowAuth: false,  // 是否显示设置权限界面
+      isContinuePay: false,
       showStatus: 0
     }
   }
@@ -63,11 +64,13 @@ class order extends PureComponent {
         title: '预约开始时间',
         dataIndex: 'startTime',
         key: 'startTime',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '预约结束时间',
         dataIndex: 'endTime',
         key: 'endTime',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '总预约时间',
@@ -95,7 +98,7 @@ class order extends PureComponent {
           return (
             <span>
               <span>
-                当前状态：{text}
+                {text}
               </span>
             </span>
           )
@@ -114,6 +117,15 @@ class order extends PureComponent {
   onRow = (item) => {
     return {
       onClick: event => {  // 点击行
+        if(item.status === 0) {
+          this.setState({
+            isContinuePay: true
+          })
+        } else {
+          this.setState({
+            isContinuePay: false
+          })
+        }
         this.setState({
           item
         })
@@ -138,7 +150,7 @@ class order extends PureComponent {
 
   componentDidMount() {
     // console.log('staffStatus')
-    this.props.getList(1, '', '', this.props.currentUser.toJS())
+    this.props.getList(1, this.props.currentUser.toJS())
     // this.props.getRoleList()
   }
 
@@ -163,7 +175,7 @@ class order extends PureComponent {
           <Button
             icon="edit"
             type='primary'
-            disabled={!item._id}
+            disabled={!this.state.isContinuePay}
             // onClick={() => this.setState({ showStatus: 1 })}
             onClick={()=>{
               // this.props.history.push('/staffDetail', { item: item })
@@ -231,7 +243,7 @@ class order extends PureComponent {
           pagination={{
             total,
             defaultPageSize: PAGE_SIZE,
-            showQuickJumper: true, onChange: (pageNum) => { getList(pageNum, '', '', this.props.currentUser.toJS()) }
+            showQuickJumper: true, onChange: (pageNum) => { getList(pageNum,  this.props.currentUser.toJS()) }
           }}
           rowSelection={{
             type: 'radio',
@@ -297,12 +309,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getList(pageNum, searchType, searchName, user) {
-    console.log('user.isHead', user)
-    let _id = '';
-    if (user.isHead) {
-      _id = user._id
-    }
+  getList(pageNum, user) {
+    console.log(user)
+    let _id = user._id;
     dispatch(actionCreators.reqList(pageNum, PAGE_SIZE, _id));
   }
 })

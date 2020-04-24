@@ -122,7 +122,7 @@ class order extends PureComponent {
         if (result.status === 0) {
           message.success('订单完成!');
           console.log(result)
-          this.props.getList(pageNum,'','', this.props.currentUser.toJS())
+          this.props.getList(pageNum, this.props.currentUser.toJS())
         } else {
           message.warn('发生了错误!');
         }
@@ -187,7 +187,7 @@ class order extends PureComponent {
 
   componentDidMount() {
     // console.log('staffStatus')
-    this.props.getList(1,'','', this.props.currentUser.toJS())
+    this.props.getList(1,this.props.currentUser.toJS())
     // this.props.getRoleList()
   }
 
@@ -285,7 +285,7 @@ class order extends PureComponent {
           pagination={{
             total,
             defaultPageSize: PAGE_SIZE,
-            showQuickJumper: true,onChange: (pageNum) => { getList(pageNum, '', '', this.props.currentUser.toJS()) }
+            showQuickJumper: true,onChange: (pageNum) => { getList(pageNum, this.props.currentUser.toJS()) }
           }}
           rowSelection={{ 
             type: 'radio', 
@@ -299,41 +299,6 @@ class order extends PureComponent {
           onRow={this.onRow}
         ></Table>
 
-        {/* <Modal
-          title="查看权限"
-          visible={showStatus === 2}
-          onOk={() => {
-            this.setState({ showStatus: 0 })
-            // this.updateRole(creatorJS, this.form);
-            // getList()
-          }}
-          onCancel={() => {
-            this.setState({ showStatus: 0 })
-            // this.form.resetFields();
-          }}
-        >
-          <AuthForm
-            item={item.role}
-            list={this.props.menuList}
-            // ref={this.auth}
-          // setForm={(form) => { this.form = form }}
-          />
-        </Modal> */}
-
-        {/* <Modal
-          title="管理角色"
-          visible={showStatus === 1}
-          onOk={() => {
-            this.changeRole(this.props.pageNum)
-          }}
-          onCancel={this.handleCancel}
-        >
-          <EditForm
-            item={item}
-            roles={rolesJS}
-            setForm={(form) => { this.form = form }}
-          />
-        </Modal> */}
       
       </Card>
     )
@@ -349,13 +314,10 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getList(pageNum, searchType, searchName, user) {
-    console.log('user.isHead', user)
-    let _id = '';
-    if(user.isHead){
-      _id = user._id
-    }
-    dispatch(actionCreators.reqList(pageNum, PAGE_SIZE,_id));
+  getList(pageNum, user) {
+    console.log(user)
+    let _id = user._id;
+    dispatch(actionCreators.reqList(pageNum, PAGE_SIZE, _id));
   }
 })
 

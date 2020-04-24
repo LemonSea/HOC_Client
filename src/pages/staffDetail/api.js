@@ -86,3 +86,19 @@ export const reqOrderDetail = (_id) => {
     }
 }
 
+export const reqChangeOrder = (_id, status) => {
+    try {
+        console.log('reqFinishOrder-status', status)
+        return axiosAuthInstance({
+            method: "PUT",
+            headers: { 'Content-type': 'application/json', },
+            url: 'order/client/orderStatus',
+            data: {
+                _id,
+                status
+            },
+        })
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}

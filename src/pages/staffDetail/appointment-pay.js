@@ -8,23 +8,21 @@ import {
   Card,
   Form,
   Input,
-  Tooltip,
+  Modal,
   Icon,
-  Cascader,
+  Steps,
   Select,
   Row,
   Col,
   Checkbox,
   Button,
-  AutoComplete,
-  Steps,
   message,
   Radio,
   DatePicker, List, Divider, Avatar, Descriptions, Carousel
 } from 'antd';
 import LinkButton from '../../components/link-button';
 import AppointmentForm from './appointment-form';
-import { reqAddOrder } from './api'
+import { reqChangeOrder } from './api';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -38,19 +36,50 @@ const IconText = ({ type, text }) => (
 
 class AppointmentPay extends Component {
 
+  
+  /**
+   * 完成订单
+   */
+  changeStatus = (_id, status) => {
+    Modal.confirm({
+      title: `确定支付?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: async () => {
+        const result = await reqChangeOrder(_id, status)
+        console.log('result', result)
+        if (result.status === 0) {
+          message.success('支付成功!');
+          console.log(result)
+          // this.props.getList(pageNum,'','', this.props.currentUser.toJS())
+        } else {
+          message.warn('发生了错误!');
+        }
+      },
+      // onCancel() {
+      //   console.log('Cancel');
+      // },
+    });
+  }
 
+
+  // 取消支付
   handleCancel = () => {
     // console.log('handleCancel')
     message.warning('请在三天内完成支付！')
     this.props.history.push('/home')
   }
 
+  // 确认支付
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        console.log(values)
-        this.props.history.push('/appointment-done')
+        const _id = this.props.location.state.item._id;
+        this.changeStatus(_id,1)
+        this.props.history.push('/home')
+        // this.props.history.push('/appointment-done')
         // this.props.history.push('/appointment-finish', { item: this.props.location.state.item })
       }
     }
@@ -130,10 +159,20 @@ class AppointmentPay extends Component {
       },
     };
 
+    // 左侧
+    const title = (
+      <span>
+        <LinkButton>
+          <Icon type='arrow-left' style={{ fontSize: 20 }} onClick={() => this.props.history.goBack()} />
+        </LinkButton>
+        <span>确认支付</span>
+      </span>
+    )
+
     return (
       <div style={{ background: '#ECECEC', padding: '30px' }} >
         <Card
-          title="确认支付"
+          title={title}
           bordered={true}
           style={{ maxWidth: 800, margin: '0 auto' }}
           // hoverable={true}
@@ -156,26 +195,18 @@ class AppointmentPay extends Component {
 
             <List.Item
               key={item.title}
-              // actions={[
-              //   <IconText type="star-o" text={'星级：' + item.star} key="list-vertical-star-o" />,
-              //   // <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-              //   <IconText type="money-collect" text={'总时长：' + item.countTime.countHours + '小时'} key="list-vertical-message" />,
-              //   <IconText type="money-collect" text={'总费用：' + item.costHour * item.countTime.countHours + '元'} key="list-vertical-message" />,
-              //   // <IconText type="carry-out" text={'当前状态：' + item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
-              // ]}
             >
               <List.Item.Meta
                 title={<a href={item.href}>{'订单编号：' + item._id}</a>}
-              // description={'员工简介：' + item.introduction}
               />
-           开始时间：{item.startTime}
+           开始时间：{moment(item.startTime).format('YYYY-MM-DD HH:mm:ss')}
             &emsp; |&emsp;
-            结束时间：{item.endTime}
+            结束时间：{moment(item.endTime).format('YYYY-MM-DD HH:mm:ss')}
             &emsp; |&emsp;
             总时间：{item.countTime ? item.countTime.countHours + ' hours' : ''}
               <br />
               <br />
-            服务地址：{item.address}
+            服务地址：{item.serviceAddress ? item.serviceAddress.areaStr + item.serviceAddress.detailAddress : ''}
             &emsp; |&emsp;
             下单时间：{moment(item.firstTime).format('YYYY-MM-DD HH:mm:ss')}
             &emsp; |&emsp;
