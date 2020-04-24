@@ -163,6 +163,7 @@ class AppointmentPay extends Component {
       },
     };
 
+    
     return (
       <div style={{ background: '#ECECEC', padding: '30px' }} >
         <Card
