@@ -131,6 +131,7 @@ class Temp extends Component {
     });
   }
 
+  // 设置默认地址
   setDefault = async (newId) => {
     const user = this.props.currentUser.toJS()._id;
     let oldId;

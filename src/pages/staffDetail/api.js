@@ -2,7 +2,7 @@
 // import { postLoginRequest } from '../../../api/request';
 import { axiosAuthInstance } from "../../api/config";
 
-
+// 增加订单
 export const reqAddOrder = (data) => {
     try {
         const Result = axiosAuthInstance({
@@ -68,3 +68,21 @@ export const reqAllStaffFavoritesList = (user) => {
         console.log('请求出错！', error)
     }
 }
+
+// 获取订单详情
+export const reqOrderDetail = (_id) => {
+    try {
+        const Result = axiosAuthInstance({
+            method: "GET",
+            headers: { 'Content-type': 'application/json', },
+            url: 'order/client',
+            params: {
+                _id
+            },
+        })
+        return Result;
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}
+

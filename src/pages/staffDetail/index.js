@@ -54,6 +54,7 @@ class BrandDetail extends PureComponent {
       endTime: '',  // 预约时间结束
       staffDetail: '',
       favoritesList: [],
+      isOptional: false,
       isFavorites: false
     }
   }
@@ -90,16 +91,15 @@ class BrandDetail extends PureComponent {
     this.setState({
       startTime: moment(value[0]).format('YYYY-MM-DD HH:mm:ss'),
       endTime: moment(value[1]).format('YYYY-MM-DD HH:mm:ss')
+    }, ()=> {
+      this.setState({
+        isOptional: true
+      })
     })
   }
 
+  // 预约功能
   appointment = () => {
-    // console.log('appointment', this.state.startTime)
-    // console.log('appointment', this.state.endTime)
-    // let item = {
-    //   startTime: this.state.startTime,
-    //   endTime:this.state.endTime
-    // }
 
     let { item } = this.props.location.state;
     item['startTime'] = this.state.startTime;
@@ -110,6 +110,7 @@ class BrandDetail extends PureComponent {
     if (countTime.hours < 1) {
       message.warning('最少预约1小时！')
     } else {
+      console.log(countTime)
       // message.success('最少预约1小时！')
       this.props.history.push('/appointment-sure', { item: item })
     }
@@ -164,7 +165,7 @@ class BrandDetail extends PureComponent {
     const result = await reqAllStaffFavoritesList(user)
     if (result.status === 0) {
       result.data.forEach(element => {
-        if(element.staff === this.props.location.state.item._id) {
+        if (element.staff === this.props.location.state.item._id) {
           this.setState({
             isFavorites: true
           })
@@ -239,7 +240,7 @@ class BrandDetail extends PureComponent {
             }
           >
             <List.Item.Meta
-              avatar={<Avatar src={item.avatar} />}
+              avatar={<Avatar src={BASE_IMG_URL + item.avatar} />}
               title={<a href={item.href}>{'员工名称：' + item.name}</a>}
               description={'员工简介：' + item.introduction}
             />
@@ -255,11 +256,9 @@ class BrandDetail extends PureComponent {
             性别：{item.gender === 0 ? '女' : '男'}
             <br />
             <br />
-            工作地址：{item.address}
-            &emsp; |&emsp;
-            总订单数：{item.orderCount}
-            &emsp; |&emsp;
-            好评订单数：{item.highPraiseOrder}
+            工作区域：{item.workAreaStr}
+            {/* &emsp; |&emsp;
+            总订单数：{item.orderCount} */}
             <br />
             <br />
             预约电话：{item.company ? item.company.phone1.prefix1 + '+' + item.company.phone1.phone1 : ''}
@@ -283,7 +282,7 @@ class BrandDetail extends PureComponent {
             &emsp; |&emsp;
             <Button
               type='primary'
-              disabled={item.status === 0 ? false : true}
+              disabled={this.state.isOptional ? false : true}
               onClick={this.appointment}
             >预约</Button>
             &emsp; |&emsp;
@@ -309,7 +308,7 @@ class BrandDetail extends PureComponent {
                   title={<a href={item.href}>{'公司名称：' + item.company.name}</a>}
                   description={'公司介绍：' + item.company.describe}
                 />
-            公司地址：{item.company.address}
+            公司地址：{item.company.areaStr + item.company.detailAddress}
             &emsp; |&emsp;
             公司邮箱：{item.company.email}
                 <br />

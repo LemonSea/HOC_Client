@@ -64,10 +64,10 @@ class BrandList extends Component {
               )
             })}
           </List.Item>
-          <List.Item>
+          {/* <List.Item>
             <Typography.Title level={4}>时间：</Typography.Title>
             <RangePicker onChange={this.onPickerChange} />
-          </List.Item>
+          </List.Item> */}
         </List>
       </div>
     )

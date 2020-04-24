@@ -80,17 +80,23 @@ class AppointmentPay extends Component {
   };
 
 
+  componentDidMount() {
+    const _id = this.props.location.state.item._id;
+    this.props.getOrderDetail(_id);
+  }
+
   render() {
 
-    const { item } = this.props.location.state
-    console.log('AppointmentPay', item)
 
     // dispatch to props
     const { } = this.props;
 
     // state to props
-    const { currentUser } = this.props;
+    const { currentUser,orderDetail } = this.props;
     const currentUserJS = currentUser ? currentUser.toJS() : [];
+    const item = orderDetail ? orderDetail.toJS() : [];
+    // const { item } = this.props.location.state
+    // console.log('AppointmentPay', item)
 
     const { getFieldDecorator } = this.props.form;
 
@@ -166,7 +172,7 @@ class AppointmentPay extends Component {
             &emsp; |&emsp;
             结束时间：{item.endTime}
             &emsp; |&emsp;
-            总时间：{item.countTime.countHours + ' hours'}
+            总时间：{item.countTime ? item.countTime.countHours + ' hours' : ''}
               <br />
               <br />
             服务地址：{item.address}
@@ -176,7 +182,7 @@ class AppointmentPay extends Component {
             消费金额：{item.amount}
               <br />
               <br />
-            消费者电话：{item.phone.prefix + '+' + item.phone.phone}
+            消费者电话：{item.phone ?  item.phone.prefix + '+' + item.phone.phone : ''}
             </List.Item>
           </List>
 
@@ -231,12 +237,16 @@ class AppointmentPay extends Component {
 
 const mapStateToProps = (state) => ({
   currentUser: state.getIn(['loginReducer', 'currentUser']),
+  orderDetail: state.getIn(['staffDetailReducer', 'orderDetail']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getOfficer(data) {
     dispatch(actionCreators.getOfficer(data));
-  }
+  },  
+  getOrderDetail(_id) {
+    dispatch(actionCreators.getOrderDetail(_id));
+  },
 })
 
 const WrappedRegistrationForm = Form.create({ name: 'appointment-pay' })(AppointmentPay);

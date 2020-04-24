@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import city from '../../utils/city.json';
 
 import {
   Card,
@@ -48,6 +49,7 @@ class RegFirm extends Component {
         const imgs = this.pw.current.getImgs()
         console.log('imgs: ', imgs);
         values.imgs = imgs;
+        values.areaStr = values.area.join('');
         values.phone1 = {
           phone1: values.phone1,
           prefix1: values.prefix1
@@ -188,10 +190,33 @@ class RegFirm extends Component {
               })(<Input.TextArea />)}
             </Form.Item>
 
-            <Form.Item label="address">
+            {/* <Form.Item label="address">
               {getFieldDecorator('address', {
                 rules: [{ required: true, message: 'Please input your address!' }],
               })(<Input.TextArea />)}
+            </Form.Item> */}
+
+            <Form.Item label='所在地区： ' >
+              {getFieldDecorator('area', {
+                // initialValue: '',
+                rules: [{ required: true, message: '所在地区不能为空!' }]
+              })(
+                <Cascader
+                  options={city}
+                  onChange={this.onChange}
+                  placeholder="-请选择-"
+                  showSearch={this.filter}
+                />
+              )}
+            </Form.Item>
+
+            <Form.Item label='详细地址： ' >
+              {getFieldDecorator('detailAddress', {
+                // initialValue: '',
+                rules: [{ required: true, message: '详细地址不能为空!' }]
+              })(
+                <Input placeholder="" />
+              )}
             </Form.Item>
 
             {/* PicturesWall */}

@@ -93,7 +93,7 @@ class BrandList extends Component {
               title={<a href={item.href}>{item.name}</a>}
               description={item.describe}
             />
-            公司地址：{item.address}
+            公司地址：{item.areaStr + item.detailAddress}
             &emsp; |&emsp;
             公司邮箱：{item.email}
             <br />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
+import { actionCreators as userAddressActionCreators } from '../address/store';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -42,6 +43,7 @@ class AppointmentSure extends Component {
   //   this.props.history.push('/appointment-pay', { item: result.data })
   // }
 
+  // 提交订单
   orderSub = () => {
     this.form.validateFields(async (err, value) => {
       if (!err) {
@@ -54,7 +56,7 @@ class AppointmentSure extends Component {
           user: currentUserJS._id,
           employee: item._id,
           company: item.company._id,
-          address: value.address,
+          serviceAddress: value.serviceAddress,
           phone : {
             phone: value.phone,
             prefix: value.prefix
@@ -65,7 +67,7 @@ class AppointmentSure extends Component {
           countTime: item.countTime,
           status: 0,
           note: value.describe,
-          firstTime: new Date()
+          placeTime: new Date()
         }
         const result = await reqAddOrder(formData)
         console.log('add order', formData)
@@ -100,17 +102,23 @@ class AppointmentSure extends Component {
   //   }
   // }
 
+  componentDidMount() {
+    const user = this.props.currentUser.toJS()._id;
+    this.props.getUserAddressList(user)
+  }
+
   render() {
 
     const { item } = this.props.location.state
-    console.log('AppointmentSure', item)
+    // console.log('AppointmentSure', item)
 
     // dispatch to props
     const { } = this.props;
 
     // state to props
-    const { currentUser } = this.props;
+    const { currentUser,addressList } = this.props;
     const currentUserJS = currentUser ? currentUser.toJS() : [];
+    const addressListJS = addressList ? addressList.toJS() : [];
 
     // const { getFieldDecorator } = this.props.form;
 
@@ -181,10 +189,12 @@ class AppointmentSure extends Component {
             </List.Item>
 
             <List.Item>
+              {/* 需要填写的内容 */}
               <AppointmentForm
                 item={item}
                 setForm={(form) => { this.form = form }}
                 currentUser={currentUserJS}
+                addressList = {addressListJS}
               />
             </List.Item>
             <List.Item>
@@ -204,12 +214,16 @@ class AppointmentSure extends Component {
 
 const mapStateToProps = (state) => ({
   currentUser: state.getIn(['loginReducer', 'currentUser']),
+  addressList: state.getIn(['addressReducer', 'list'])
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getOfficer(data) {
     dispatch(actionCreators.getOfficer(data));
-  }
+  },  
+  getUserAddressList(user) {
+    dispatch(userAddressActionCreators.getList(user));
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(AppointmentSure))

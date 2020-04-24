@@ -73,9 +73,9 @@ class StaffList extends Component {
             key={item.title}
             actions={[
               <IconText type="star-o" text={'星级：' + item.star} key="list-vertical-star-o" />,
-              <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-              <IconText type="message" text="2" key="list-vertical-message" />,
-              <IconText type="carry-out" text={item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
+              // <IconText type="like-o" text="156" key="list-vertical-like-o" />,
+              // <IconText type="message" text="2" key="list-vertical-message" />,
+              // <IconText type="carry-out" text={item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
               <Button onClick={() => { this.details(item) }}>查看详情</Button>,
             ]}
             extra={
@@ -88,7 +88,7 @@ class StaffList extends Component {
             }
           >
             <List.Item.Meta
-              avatar={<Avatar src={item.avatar} />}
+              avatar={<Avatar src={BASE_IMG_URL + item.avatar} />}
               title={<a href={item.href}>{item.name}</a>}
               description={item.introduction}
             />
@@ -107,11 +107,9 @@ class StaffList extends Component {
             性别：{item.gender === 0 ? '女' : '男'}
             <br />
             <br />
-            工作地址：{item.address}
-            &emsp; |&emsp;
-            总订单数：{item.orderCount}
-            &emsp; |&emsp;
-            好评订单数：{item.highPraiseOrder}
+            工作区域：{item.workAreaStr}
+            {/* &emsp; |&emsp;
+            总订单数：{item.orderCount} */}
             &emsp; |&emsp;
             费用：{item.costHour} 元/小时
           </List.Item>
