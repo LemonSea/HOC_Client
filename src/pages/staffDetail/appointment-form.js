@@ -32,7 +32,7 @@ class AppointmentForm extends Component {
 
     this.props.addressList.forEach(element => {
       console.log(element.isDefault)
-      if(element.isDefault) { 
+      if (element.isDefault) {
         this.setState({
           addressId: element._id,
           addressArea: element.area,
@@ -49,8 +49,9 @@ class AppointmentForm extends Component {
     // dispatch to props
     const { } = this.props;
 
-    const { item,currentUser,addressList } = this.props;
+    const { item, currentUser, addressList } = this.props;
     console.log(this.state)
+    console.log('item',item)
 
     const formItemLayout = {
       labelCol: { span: 4 },  // 左侧 label 宽度
@@ -80,22 +81,30 @@ class AppointmentForm extends Component {
           })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
         </Item>
 
-        <Item label='选择服务地址'>
-            {getFieldDecorator('serviceAddress', {
-              initialValue: this.state.addressId,
-              // initialValue: item ? item.staffStatus._id : "请输入员工类型",
-              rules: [{ required: true, message: '必须输入地址!' }],
-            })(
-              <Select style={{ width: 410 }} onChange={this.handleSelectChange}>
-                {addressList.map((item, index) => {
-                  return (
-                    < Option key={item._id} value={item._id}>{item.areaStr + item.detailAddress}</Option>
-                  )
-                })}
-              </Select>)}
-          </Item>
+        <Item label='选择服务地址'
+          // style={{
+          //   display: item.areaStr ? "" : "none"
+          // }}
+          >
+          {getFieldDecorator('serviceAddress', {
+            initialValue: this.state.addressId,
+            // initialValue: item ? item.staffStatus._id : "请输入员工类型",
+            rules: [{ required: true, message: '必须输入地址!' }],
+          })(
+            <Select style={{ width: 410 }} onChange={this.handleSelectChange}>
+              {addressList.map((item, index) => {
+                return (
+                  < Option key={item._id} value={item._id}>{item.areaStr + item.detailAddress}</Option>
+                )
+              })}
+            </Select>)}
+        </Item>
 
-        {/* <Form.Item label='所在地区： ' >
+{/* 
+        <Form.Item label='所在地区： ' 
+        style={{
+          display: item.areaStr ? "none" : ""
+        }}>
           {getFieldDecorator('area', {
             initialValue: this.state.addressArea,
             rules: [{ required: true, message: '所在地区不能为空!' }]
@@ -110,7 +119,9 @@ class AppointmentForm extends Component {
           )}
         </Form.Item>
 
-        <Form.Item label='详细地址： ' >
+        <Form.Item label='详细地址： '  style={{
+          display: item.areaStr ? "none" : ""
+        }}>
           {getFieldDecorator('detailAddress', {
             initialValue: this.state.detailAddress,
             rules: [{ required: true, message: '详细地址不能为空!' }]

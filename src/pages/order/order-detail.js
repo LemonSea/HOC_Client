@@ -41,7 +41,6 @@ class OrderDetail extends Component {
   }
 
   render() {
-
     // const { item } = this.props.location.state
     // console.log('AppointmentPay', item)
 
@@ -53,6 +52,18 @@ class OrderDetail extends Component {
     const currentUserJS = currentUser ? currentUser.toJS() : [];
     const item = orderDetail ? orderDetail.toJS() : [];
 
+    let statusText;
+    if(item.status === 0) {
+      statusText = '待支付'
+    } else if(item.status === 1) {
+      statusText = '已支付，待完成'
+    } else if(item.status === 2) {
+      statusText = '已完成，待评论'
+    }else if(item.status === 3) {
+      statusText = '完成'
+    } else {
+      statusText = '已取消'
+    }
     // 左侧
     const title = (
       <span>
@@ -114,7 +125,8 @@ class OrderDetail extends Component {
             服务人员：{item.employee ? item.employee.name : ''}
               <br />
               <br />
-            订单状态：<Button type='danger'>已完成</Button>
+            订单状态:
+            <Button type='default' style={{marginLeft:10}}>{statusText}</Button>
             </List.Item>
           </List>
         </Card>

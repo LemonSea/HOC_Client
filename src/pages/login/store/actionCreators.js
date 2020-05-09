@@ -26,6 +26,7 @@ const changeLayoutState = () => ({
 export const postLoginRequest = (FormData) => {
   return async (dispatch) => {
     const result = await reqLogin(FormData)
+    var host = window.location.host
     if (result.status === 0) {
       console.log(result.data)
       // 登录成功 
@@ -34,12 +35,13 @@ export const postLoginRequest = (FormData) => {
       storageUser.setUser(result.data)
       storageToken.setToken(result.token)
       dispatch(userLogin(result.data))
-      window.location.href = 'http://localhost:3000/home';
+      window.location.href = 'http://' + host + '/home';
     } else {
       // 登录失败
       dispatch(changeLoginState())
       alert('账号密码错误！')
-      window.location.href = 'http://localhost:3000/login';
+      window.location.href = 'http://' + host + '/login';
+      // window.location.href = 'http://localhost:3000/login';
     }
   }
 }

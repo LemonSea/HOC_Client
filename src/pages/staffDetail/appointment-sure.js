@@ -57,6 +57,7 @@ class AppointmentSure extends Component {
           employee: item._id,
           company: item.company._id,
           serviceAddress: value.serviceAddress,
+          // serviceAddress: value.serviceAddress ? value.serviceAddress : value.area + value.detailAddress,
           phone : {
             phone: value.phone,
             prefix: value.prefix
@@ -70,7 +71,8 @@ class AppointmentSure extends Component {
           placeTime: new Date()
         }
         const result = await reqAddOrder(formData)
-        console.log('add order', formData)
+        // console.log('add order', formData)
+        //   message.success('提交订单成功!');
         if (result.status === 0) {
           console.log(result.data)
           message.success('提交订单成功!');
