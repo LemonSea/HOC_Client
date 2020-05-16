@@ -62,22 +62,23 @@ class order extends PureComponent {
         dataIndex: 'company[name]',
         key: 'company[name]',
       },
-      {
-        title: '预约开始时间',
-        dataIndex: 'startTime',
-        key: 'startTime',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '预约结束时间',
-        dataIndex: 'endTime',
-        key: 'endTime',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
+      // {
+      //   title: '预约开始时间',
+      //   dataIndex: 'startTime',
+      //   key: 'startTime',
+      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
+      // {
+      //   title: '预约结束时间',
+      //   dataIndex: 'endTime',
+      //   key: 'endTime',
+      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
       {
         title: '总预约时间',
-        dataIndex: 'countTime[countHours]',
-        key: 'countTime[countHours]',
+        dataIndex: 'countTime',
+        key: 'countTime',
+        render: val => <span>{val + ` hours`}</span>,
       },
       {
         title: '订单状态',
@@ -110,8 +111,8 @@ class order extends PureComponent {
       },
       {
         title: '下单时间',
-        dataIndex: 'firstTime',
-        key: 'firstTime',
+        dataIndex: 'placeTime',
+        key: 'placeTime',
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
     ];

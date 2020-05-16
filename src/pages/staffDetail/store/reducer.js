@@ -6,7 +6,8 @@ import { fromJS } from 'immutable';
 // 这里用到fromJS把JS数据结构转化成immutable数据结构
 const defaultState = fromJS({
     staffDetail: {},
-    orderDetail: {}
+    orderDetail: {},
+    staffOrder: []
 });
 
 export default (state = defaultState, action) => {
@@ -15,6 +16,8 @@ export default (state = defaultState, action) => {
             return state.set('staffDetail', action.data);
         case actionTypes.GET_ORDER_DETAIL:
             return state.set('orderDetail', action.data);
+            case actionTypes.STAFF_ORDER:
+                return state.set('staffOrder', action.data);
         default:
             return state;
     }

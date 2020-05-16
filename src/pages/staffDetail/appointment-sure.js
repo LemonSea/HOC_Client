@@ -30,6 +30,41 @@ import { reqAddOrder } from './api'
 const { Option } = Select;
 const { Step } = Steps;
 
+const timeOptions = [
+  {
+    value: '1',
+    label: '8:00 - 9:00',
+  },
+  {
+    value: '2',
+    label: '9:00 - 10:00',
+  },
+  {
+    value: '3',
+    label: '10:00 - 11:00',
+  },
+  {
+    value: '4',
+    label: '11:00 - 12:00',
+  },
+  {
+    value: '5',
+    label: '14:00 - 15:00',
+  },
+  {
+    value: '6',
+    label: '15:00 - 16:00',
+  },
+  {
+    value: '7',
+    label: '16:00 - 17:00',
+  },
+  {
+    value: '8',
+    label: '17:00 - 18:00',
+  }
+]
+
 const IconText = ({ type, text }) => (
   <span>
     <Icon type={type} style={{ marginRight: 8 }} />
@@ -59,14 +94,16 @@ class AppointmentSure extends Component {
           company: item.company._id,
           serviceAddress: value.serviceAddress,
           // serviceAddress: value.serviceAddress ? value.serviceAddress : value.area + value.detailAddress,
-          phone : {
+          phone: {
             phone: value.phone,
             prefix: value.prefix
           },
-          amount: item.costHour * item.countTime.countHours,
-          startTime: item.startTime,
-          endTime:item.endTime,
+          amount: item.costHour * item.countTime,
+          // startTime: item.startTime,
+          // endTime:item.endTime,
           countTime: item.countTime,
+          timeKeys: item.selectKeys,
+          appointDay: item.selectDay,
           status: 0,
           note: value.describe,
           placeTime: new Date()
@@ -78,7 +115,7 @@ class AppointmentSure extends Component {
           console.log(result.data)
           message.success('提交订单成功!');
           this.props.history.push('/appointment-pay', { item: result.data })
-          console.log('formData',formData)
+          console.log('formData', formData)
         } else {
           message.warn('提交订单失败!');
         }
@@ -113,13 +150,13 @@ class AppointmentSure extends Component {
   render() {
 
     const { item } = this.props.location.state
-    // console.log('AppointmentSure', item)
+    console.log('AppointmentSure', item)
 
     // dispatch to props
     const { } = this.props;
 
     // state to props
-    const { currentUser,addressList } = this.props;
+    const { currentUser, addressList } = this.props;
     const currentUserJS = currentUser ? currentUser.toJS() : [];
     const addressListJS = addressList ? addressList.toJS() : [];
 
@@ -154,8 +191,8 @@ class AppointmentSure extends Component {
               actions={[
                 <IconText type="star-o" text={'星级：' + item.star} key="list-vertical-star-o" />,
                 // <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-                <IconText type="money-collect" text={'总时长：' + item.countTime.countHours + '小时'} key="list-vertical-message" />,
-                <IconText type="money-collect" text={'总费用：' + item.costHour * item.countTime.countHours + '元'} key="list-vertical-message" />,
+                <IconText type="money-collect" text={'总时长：' + item.countTime + '小时'} key="list-vertical-message" />,
+                <IconText type="money-collect" text={'总费用：' + item.costHour * item.countTime + '元'} key="list-vertical-message" />,
                 // <IconText type="carry-out" text={'当前状态：' + item.status === 0 ? '空闲' : '忙碌'} key="list-vertical-message" />,
               ]}
             >
@@ -169,8 +206,6 @@ class AppointmentSure extends Component {
             职业类型：{item.staffStatus['name']}
               {/* &emsp; |&emsp;
             费用：{item.costHour} 元/小时 */}
-            &emsp; |&emsp;
-            预约时间：{item.startTime} -- {item.endTime}
               <br />
               <br />
             年龄：{item.age}
@@ -187,6 +222,19 @@ class AppointmentSure extends Component {
             好评订单数：{item.highPraiseOrder} */}
               <br />
               <br />
+              预约日期: {item.selectDay}
+              &emsp; |&emsp;
+            预约时间：{item.selectKeys.map(element => {
+                // return timeOptions.forEach((e)=>{
+                //   return e.value === element ? e.label : ''
+                // })
+                for (let i = 0; i < timeOptions.length; i++) {
+                  if (timeOptions[i].value = element) return timeOptions[i].label + `    `
+                  else return 3
+                }
+              })}
+              <br />
+              <br />
             预约电话：{item.company.phone1 ? item.company.phone1.prefix1 + '+' + item.company.phone1.phone1 : ''}
 
             </List.Item>
@@ -197,7 +245,7 @@ class AppointmentSure extends Component {
                 item={item}
                 setForm={(form) => { this.form = form }}
                 currentUser={currentUserJS}
-                addressList = {addressListJS}
+                addressList={addressListJS}
               />
             </List.Item>
             <List.Item>
@@ -223,7 +271,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getOfficer(data) {
     dispatch(actionCreators.getOfficer(data));
-  },  
+  },
   getUserAddressList(user) {
     dispatch(userAddressActionCreators.getList(user));
   },

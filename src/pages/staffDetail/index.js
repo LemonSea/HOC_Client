@@ -13,7 +13,7 @@ import {
   HomeSide,
 
 } from './style';
-import { List, Divider, Avatar, Icon, Button, message, DatePicker, Descriptions, Carousel } from 'antd';
+import { List, Divider, Avatar, Icon, Button, message, DatePicker, Checkbox, Carousel } from 'antd';
 
 import TabBoxStaff from './common/TabBox-Staff';
 
@@ -45,6 +45,85 @@ const data = [
   },
 ];
 
+const periodofTime = [
+  {
+    key: '1',
+    time: '8:00 - 9:00',
+    isOption: true
+  },
+  {
+    key: '2',
+    time: '9:00 - 10:00',
+    isOption: true
+  },
+  {
+    key: '3',
+    time: '10:00 - 11:00',
+    isOption: true
+  },
+  {
+    key: '4',
+    time: '11:00 - 12:00',
+    isOption: true
+  },
+  {
+    key: '5',
+    time: '14:00 - 15:00',
+    isOption: true
+  },
+  {
+    key: '6',
+    time: '15:00 - 16:00',
+    isOption: true
+  },
+  {
+    key: '7',
+    time: '16:00 - 17:00',
+    isOption: true
+  },
+  {
+    key: '8',
+    time: '17:00 - 18:00',
+    isOption: true
+  }
+]
+const timeOptions = [
+  {
+    value: '1',
+    label: '8:00 - 9:00',
+  },
+  {
+    value: '2',
+    label: '9:00 - 10:00',
+  },
+  {
+    value: '3',
+    label: '10:00 - 11:00',
+  },
+  {
+    value: '4',
+    label: '11:00 - 12:00',
+  },
+  {
+    value: '5',
+    label: '14:00 - 15:00',
+  },
+  {
+    value: '6',
+    label: '15:00 - 16:00',
+  },
+  {
+    value: '7',
+    label: '16:00 - 17:00',
+  },
+  {
+    value: '8',
+    label: '17:00 - 18:00',
+  }
+]
+
+
+
 class BrandDetail extends PureComponent {
 
   constructor(props) {
@@ -55,7 +134,11 @@ class BrandDetail extends PureComponent {
       staffDetail: '',
       favoritesList: [],
       isOptional: false,
-      isFavorites: false
+      isFavorites: false,
+      currentTime: null,
+      canSubmit: false,
+      selectKeys: [],
+      selectDay: new Date().toLocaleDateString()
     }
   }
 
@@ -80,9 +163,19 @@ class BrandDetail extends PureComponent {
     }
   }
 
-  onChange = (value, dateString) => {
-    // console.log('Selected Time: ', value);
-    // console.log('Formatted Selected Time: ', dateString);
+  dayChange = (date, dateString) => {
+
+    const _id = this.props.location.state.item._id;
+    this.props.getStaffDetail(_id);
+    this.props.getStaffOrder(_id, dateString)
+    this.setState({ selectDay: dateString })
+  }
+
+  onCheckChange = (checkedValues ) => {
+    this.setState({
+      selectKeys: checkedValues,
+    })
+    console.log('checked = ', checkedValues);
   }
 
   onOk = (value) => {
@@ -99,21 +192,32 @@ class BrandDetail extends PureComponent {
   }
 
   // 预约功能
+  // appointment = () => {
+
+  //   let { item } = this.props.location.state;
+  //   item['startTime'] = this.state.startTime;
+  //   item['endTime'] = this.state.endTime;
+  //   const countTime = this.computationTime(item.startTime, item.endTime);
+  //   item['countTime'] = countTime;
+
+  //   if (countTime.hours < 1) {
+  //     message.warning('最少预约1小时！')
+  //   } else {
+  //     console.log(countTime)
+  //     // message.success('最少预约1小时！')
+  //     this.props.history.push('/appointment-sure', { item: item })
+  //   }
+  // }
   appointment = () => {
 
     let { item } = this.props.location.state;
-    item['startTime'] = this.state.startTime;
-    item['endTime'] = this.state.endTime;
-    const countTime = this.computationTime(item.startTime, item.endTime);
-    item['countTime'] = countTime;
+    item.selectKeys = this.state.selectKeys;
+    item.selectDay = this.state.selectDay;
+    item['countTime'] = this.state.selectKeys.length;
+    item['timeArr'] = this.state.timeArr
 
-    if (countTime.hours < 1) {
-      message.warning('最少预约1小时！')
-    } else {
-      console.log(countTime)
-      // message.success('最少预约1小时！')
-      this.props.history.push('/appointment-sure', { item: item })
-    }
+    this.props.history.push('/appointment-sure', { item: item })
+
   }
 
   // 收藏
@@ -177,11 +281,46 @@ class BrandDetail extends PureComponent {
     }
   }
 
+  disabledEndDate = (endValue) => {
+    let me = this;
+    const startValue = this.state.currentTime;
+    if (!endValue || !startValue) {
+      return false;
+    }
+    return endValue.valueOf() < startValue.valueOf();
+  }
+  handleEndOpenChange = (open) => {
+    let me = this
+    if (open) {
+      me.currentTime = moment();
+    }
+    this.setState({ currentTime: moment() });
+  }
+  // 选择时间
+  selectTime = (e) => {
+    // console.log('selectTime', e.target.value)
+    let keysArr = this.state.selectKeys;
+
+    let index = keysArr.indexOf(e.target.value)
+    if (index === -1) {
+      keysArr.push(e.target.value)
+    } else {
+      keysArr.splice(index, 1)
+    }
+    this.setState({
+      selectKeys: keysArr
+    }, () => {
+      console.log(this.state.selectKeys)
+    })
+  }
+
   componentDidMount() {
     const _id = this.props.location.state.item._id;
     this.props.getStaffDetail(_id);
 
     this.getFavoritesList()
+    var date = new Date();
+    this.props.getStaffOrder(_id, date.toLocaleDateString())
   }
 
   render() {
@@ -189,15 +328,43 @@ class BrandDetail extends PureComponent {
     // const { item } = this.props.location.state
     // console.log('item', item)
 
+    const { selectKeys } = this.state;
+
     const { } = this.props;
     // state to props
-    const { staffDetail } = this.props;
+    const { staffDetail, staffOrder } = this.props;
     const item = staffDetail ? staffDetail.toJS() : [];
     let staffStatus = item.staffStatus ? item.staffStatus : {}
-    console.log(item)
-    console.log('staffStatus.isAppoint', staffStatus.isAppoint)
+    let staffOrderJS = staffOrder ? staffOrder.toJS() : []
+    // console.log(item)
+    // console.log('staffStatus.isAppoint', staffStatus.isAppoint)
 
-    // console.log('staffDetailJS', item)
+    console.log('staffOrderJS', staffOrderJS)
+    let dayKeys = []
+    staffOrderJS.forEach(element => {
+      if(element.status !== -1 && element.status !== 2 && element.status !== 3)
+      element.timeKeys.forEach(key => {
+        dayKeys.push(key)
+      })
+    });
+    console.log('dayKeys',dayKeys)
+    // const options = [
+    //   { label: 'Apple', value: 'Apple' },
+    //   { label: 'Pear', value: 'Pear' },
+    //   { label: 'Orange', value: 'Orange', disabled: false },
+    // ];
+    // periodofTime.forEach(element => {
+    //   if (staffOrderJS.findIndex(d => d === element.key) !== -1) {
+    //     element.disabled = ;
+    //   }
+    // });
+    timeOptions.forEach(element => {
+      let index = dayKeys.indexOf(element.value);
+      // console.log('index',element.key,index)
+      element.disabled = index === -1 ? false : true
+    });
+
+
 
     // list 内容
     let listData = [];
@@ -282,17 +449,42 @@ class BrandDetail extends PureComponent {
 
               : <List.Item>
                 <Divider style={{ fontSize: 15 }} orientation="left">服务预约</Divider>
-                <RangePicker
-                  showTime={{ format: 'HH:mm' }}
-                  format="YYYY-MM-DD HH:mm"
-                  placeholder={['Start Time', 'End Time']}
-                  onChange={this.onChange}
-                  onOk={this.onOk}
-                />
-            &emsp; |&emsp;
-            <Button
+                <DatePicker
+                  disabledDate={this.disabledEndDate}
+                  onOpenChange={this.handleEndOpenChange}
+                  defaultValue={moment(new Date().toLocaleDateString())}
+                  onChange={this.dayChange} />
+                {/* <div>
+                  {periodofTime.map((item, index) => {
+                    // console.log('periodofTime', selectKeys)
+                    return (
+                      < Button
+                        type={selectKeys.length !== 0 ? 'danger' : 'default'}
+                        disabled={!item.isOption}
+                        onClick={this.selectTime}
+                        style={{ marginLeft: 20, marginTop: 20 }}
+                        key={item.key}
+                        value={item.key}
+                      >
+                        {item.time}
+                      </Button>
+                    )
+                  })}
+                </div> */}
+                <div>
+                  <Checkbox.Group
+                    style={{ marginTop: 20 }}
+                    options={timeOptions}
+                    // defaultValue={['Apple']}
+                    onChange={this.onCheckChange}
+                  />
+                </div>
+                {/* <div>已选择时间：{this.state.selectKeys}</div> */}
+                <Button
+                  style={{ marginTop: 20 }}
                   type='primary'
-                  disabled={this.state.isOptional ? false : true}
+                  // disabled={this.state.isOptional ? false : true}
+                  disabled={this.state.selectKeys.length === 0 ? true : false}
                   onClick={this.appointment}
                 >预约</Button>
             &emsp; |&emsp;
@@ -438,6 +630,7 @@ const mapStateToProps = (state) => ({
   currentUser: state.getIn(['loginReducer', 'currentUser']),
 
   staffDetail: state.getIn(['staffDetailReducer', 'staffDetail']),
+  staffOrder: state.getIn(['staffDetailReducer', 'staffOrder']),
 
   list: state.getIn(['staffReducer', 'list']),
   // page total
@@ -453,6 +646,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   getStaffDetail(_id) {
     dispatch(actionCreators.getStaffDetail(_id));
+  },
+  getStaffOrder(employee, SelectDate) {
+    console.log(employee, SelectDate)
+    dispatch(actionCreators.getStaffOrder(employee, SelectDate));
   },
 })
 

@@ -50,8 +50,8 @@ class AppointmentForm extends Component {
     const { } = this.props;
 
     const { item, currentUser, addressList } = this.props;
-    console.log(this.state)
-    console.log('item',item)
+    // console.log(this.state)
+    // console.log('item',item)
 
     const formItemLayout = {
       labelCol: { span: 4 },  // 左侧 label 宽度

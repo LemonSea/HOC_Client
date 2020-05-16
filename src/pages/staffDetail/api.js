@@ -121,3 +121,22 @@ export const reqAddOrderComments = (data) => {
         console.log('请求出错！', error)
     }
 }
+
+// 获取订单详情
+export const reqStaffOrder = (employee, selectDay) => {
+    try {
+        console.log(employee, selectDay)
+        const Result = axiosAuthInstance({
+            method: "GET",
+            headers: { 'Content-type': 'application/json', },
+            url: 'order/orderList',
+            params: {
+                employee,
+                selectDay
+            },
+        })
+        return Result;
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}

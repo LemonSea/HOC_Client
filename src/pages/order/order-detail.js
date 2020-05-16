@@ -33,6 +33,41 @@ const IconText = ({ type, text }) => (
   </span>
 );
 
+const timeOptions = [
+  {
+    value: '1',
+    label: '8:00 - 9:00',
+  },
+  {
+    value: '2',
+    label: '9:00 - 10:00',
+  },
+  {
+    value: '3',
+    label: '10:00 - 11:00',
+  },
+  {
+    value: '4',
+    label: '11:00 - 12:00',
+  },
+  {
+    value: '5',
+    label: '14:00 - 15:00',
+  },
+  {
+    value: '6',
+    label: '15:00 - 16:00',
+  },
+  {
+    value: '7',
+    label: '16:00 - 17:00',
+  },
+  {
+    value: '8',
+    label: '17:00 - 18:00',
+  }
+]
+
 class OrderDetail extends Component {
 
   componentDidMount() {
@@ -53,13 +88,13 @@ class OrderDetail extends Component {
     const item = orderDetail ? orderDetail.toJS() : [];
 
     let statusText;
-    if(item.status === 0) {
+    if (item.status === 0) {
       statusText = '待支付'
-    } else if(item.status === 1) {
+    } else if (item.status === 1) {
       statusText = '已支付，待完成'
-    } else if(item.status === 2) {
+    } else if (item.status === 2) {
       statusText = '已完成，待评论'
-    }else if(item.status === 3) {
+    } else if (item.status === 3) {
       statusText = '完成'
     } else {
       statusText = '已取消'
@@ -104,16 +139,30 @@ class OrderDetail extends Component {
               <List.Item.Meta
                 title={<a href={item.href}>{'订单编号：' + item._id}</a>}
               />
-              开始时间：{moment(item.startTime).format('YYYY-MM-DD HH:mm:ss')}
+              {/* 开始时间：{moment(item.startTime).format('YYYY-MM-DD HH:mm:ss')}
                &emsp; |&emsp;
-               结束时间：{moment(item.endTime).format('YYYY-MM-DD HH:mm:ss')}
+               结束时间：{moment(item.endTime).format('YYYY-MM-DD HH:mm:ss')} */}
+            预约时间：{
+                item.timeKeys
+                  ? item.timeKeys.map(element => {
+                    // return timeOptions.forEach((e)=>{
+                    //   return e.value === element ? e.label : ''
+                    // })
+                    for (let i = 0; i < timeOptions.length; i++) {
+                      if (timeOptions[i].value = element) return timeOptions[i].label + `    `
+                      else return 3
+                    }
+                  })
+                  : ''
+              }
+              {/* 预约时间:{item.timeKeys} */}
             &emsp; |&emsp;
-            总时间：{item.countTime ? item.countTime.countHours + ' hours' : ''}
+            总时间：{item.countTime ? item.countTime + ' hours' : ''}
               <br />
               <br />
               服务地址：{item.serviceAddress ? item.serviceAddress.areaStr + item.serviceAddress.detailAddress : ''}
             &emsp; |&emsp;
-            下单时间：{moment(item.firstTime).format('YYYY-MM-DD HH:mm:ss')}
+            下单时间：{moment(item.placeTime).format('YYYY-MM-DD HH:mm:ss')}
             &emsp; |&emsp;
             消费金额：{item.amount}&ensp;元
               <br />
@@ -126,7 +175,7 @@ class OrderDetail extends Component {
               <br />
               <br />
             订单状态:
-            <Button type='default' style={{marginLeft:10}}>{statusText}</Button>
+            <Button type='default' style={{ marginLeft: 10 }}>{statusText}</Button>
             </List.Item>
           </List>
         </Card>
