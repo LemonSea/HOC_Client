@@ -94,6 +94,8 @@ class order extends PureComponent {
             text = '已完成，待评论'
           } else if (status === 3) {
             text = '完成'
+          } else if (status === -2) {
+            text = '待取消'
           } else {
             text = '已取消'
           }
@@ -132,7 +134,7 @@ class order extends PureComponent {
             isComments: true,
             isCancel: false
           })
-        } else if (item.status < 2) {
+        } else if (item.status === 2) {
           this.setState({
             isContinuePay: false,
             isComments: false,
@@ -258,7 +260,7 @@ class order extends PureComponent {
           type='primary'
           disabled={!this.state.isCancel}
           // onClick={() => { this.delete(item._id, pageNum) }}
-          onClick={() => this.changeStatus(item._id, -1)}
+          onClick={() => this.changeStatus(item._id, -2)}
         >
           取消订单
     </Button>

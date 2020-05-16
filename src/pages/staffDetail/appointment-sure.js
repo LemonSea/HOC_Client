@@ -55,6 +55,7 @@ class AppointmentSure extends Component {
         const formData = {
           user: currentUserJS._id,
           employee: item._id,
+          workNumber: item.workNumber,
           company: item.company._id,
           serviceAddress: value.serviceAddress,
           // serviceAddress: value.serviceAddress ? value.serviceAddress : value.area + value.detailAddress,
@@ -186,7 +187,7 @@ class AppointmentSure extends Component {
             好评订单数：{item.highPraiseOrder} */}
               <br />
               <br />
-            预约电话：{item.company.phone1.prefix1 + '+' + item.company.phone1.phone1}
+            预约电话：{item.company.phone1 ? item.company.phone1.prefix1 + '+' + item.company.phone1.phone1 : ''}
 
             </List.Item>
 

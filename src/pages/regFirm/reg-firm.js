@@ -177,7 +177,6 @@ class RegFirm extends Component {
             <Step status="wait" title="完成" icon={<Icon type="smile-o" />} />
           </Steps>
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-
             <Form.Item label="name">
               {getFieldDecorator('name', {
                 rules: [{ required: true, message: 'Please input your realName!' }],

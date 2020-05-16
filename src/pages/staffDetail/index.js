@@ -91,7 +91,7 @@ class BrandDetail extends PureComponent {
     this.setState({
       startTime: moment(value[0]).format('YYYY-MM-DD HH:mm:ss'),
       endTime: moment(value[1]).format('YYYY-MM-DD HH:mm:ss')
-    }, ()=> {
+    }, () => {
       this.setState({
         isOptional: true
       })
@@ -193,6 +193,9 @@ class BrandDetail extends PureComponent {
     // state to props
     const { staffDetail } = this.props;
     const item = staffDetail ? staffDetail.toJS() : [];
+    let staffStatus = item.staffStatus ? item.staffStatus : {}
+    console.log(item)
+    console.log('staffStatus.isAppoint', staffStatus.isAppoint)
 
     // console.log('staffDetailJS', item)
 
@@ -270,24 +273,33 @@ class BrandDetail extends PureComponent {
           </List.Item>
 
           {/* 预约操作 */}
-          <List.Item>
-            <Divider style={{ fontSize: 15 }} orientation="left">服务预约</Divider>
-            <RangePicker
-              showTime={{ format: 'HH:mm' }}
-              format="YYYY-MM-DD HH:mm"
-              placeholder={['Start Time', 'End Time']}
-              onChange={this.onChange}
-              onOk={this.onOk}
-            />
+          {
+            staffStatus.isAppoint === 1
+              ? <List.Item>
+                <Divider style={{ fontSize: 15 }} orientation="left">服务预约</Divider>
+               温馨提示：为了确保您的服务，该类别服务暂不提供线上预约功能，请拨打客服电话进行线上预约！
+               </List.Item>
+
+              : <List.Item>
+                <Divider style={{ fontSize: 15 }} orientation="left">服务预约</Divider>
+                <RangePicker
+                  showTime={{ format: 'HH:mm' }}
+                  format="YYYY-MM-DD HH:mm"
+                  placeholder={['Start Time', 'End Time']}
+                  onChange={this.onChange}
+                  onOk={this.onOk}
+                />
             &emsp; |&emsp;
             <Button
-              type='primary'
-              disabled={this.state.isOptional ? false : true}
-              onClick={this.appointment}
-            >预约</Button>
+                  type='primary'
+                  disabled={this.state.isOptional ? false : true}
+                  onClick={this.appointment}
+                >预约</Button>
             &emsp; |&emsp;
             温馨提示：请电话沟通确认时间后下单。
           </List.Item>
+
+          }
 
           {/* 公司介绍 */}
           {item.company ?
