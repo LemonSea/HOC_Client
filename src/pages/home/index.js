@@ -19,7 +19,7 @@ import TabBoxStaff from './common/TabBox-Staff';
 
 
 class Home extends Component {
-
+  
   componentDidMount() {
     this.props.getFirmRecommend()
     this.props.getStaffRecommend()
@@ -44,9 +44,9 @@ class Home extends Component {
             <SliderBox />
           </HomeAdvertise>
 
-          <TabBoxFirm recommendList={firmRecommendListJS}/>
+          <TabBoxFirm history={this.props.history} recommendList={firmRecommendListJS}/>
           
-          <TabBoxStaff staffRecommendList={staffRecommendListJS} />
+          <TabBoxStaff history={this.props.history} staffRecommendList={staffRecommendListJS} />
         <div style={{ textAlign: 'center', height:'50px',  color: '#777' }}></div>
         </HomeWrapper>
       </div>

@@ -17,6 +17,12 @@ import { BASE_IMG_URL } from '../../../utils/constant';
 const { Meta } = Card;
 
 class TabBox extends Component {
+
+  details = (item) => {
+    console.log(item)
+    this.props.history.push('/brandDetail', { item: item })
+  }
+
   render() {
     const { recommendList } = this.props;
 
@@ -45,7 +51,8 @@ class TabBox extends Component {
                         alt={item.name}
                         src={BASE_IMG_URL + item.imgs[0]} ></img>
                         <div className='title'>{item.describe}</div>
-                        <Button>共{item.staffCount}名员工</Button>
+                        <div style={{marginBottom:10}}>共{item.staffCount}名员工</div>
+                        <Button onClick={() => { this.details(item) }}>查看详情</Button>
                     </div>
                   </Card>
                 </div>
